@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StudentPortalProject.Models;
 
 namespace StudentPortalProject.Data
 {
@@ -9,5 +10,6 @@ namespace StudentPortalProject.Data
             : base(options)
         {
         }
+        public DbSet<StudentPortalProject.Models.Course> Course { get; set; }
     }
 }
