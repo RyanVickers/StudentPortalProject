@@ -1,0 +1,19 @@
+﻿@model Course
+
+<h2>@Model.CourseName - Class List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+                <tr>
+                    <td>@student.UserName</td>
+                </tr>
+        }
+    </tbody>
+</table>

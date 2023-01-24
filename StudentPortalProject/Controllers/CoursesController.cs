@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,12 +14,13 @@ using StudentPortalProject.Models;
 
 namespace StudentPortalProject.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoursesController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public CoursesController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
@@ -28,8 +31,27 @@ namespace StudentPortalProject.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            
-            return View(await _context.Course.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var role = await _userManager.GetRolesAsync(user);
+            List<Course> courses;
+            if (role.Contains("Student"))
+            {
+                courses = await _context.Course
+                    .Include(c => c.Students)
+                    .Where(c => c.Students.Any(e => e.Id == user.Id))
+                    .ToListAsync();
+            }
+            else if (role.Contains("Teacher")) 
+            {
+                courses = await _context.Course
+                    .Where(c => c.TeacherId == user.Id)
+                    .ToListAsync();
+            }
+            else
+            {
+                courses = new List<Course>();
+            }
+            return View(courses);
         }
 
         // GET: Courses/Details/5
@@ -51,32 +73,31 @@ namespace StudentPortalProject.Controllers
         }
 
         // GET: Courses/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            var users = _userManager.Users.ToList();
-            ViewBag.Teachers = new SelectList(users, "Id", "UserName");
+            //Populate dropdown with teachers
+            var teachers = await _userManager.GetUsersInRoleAsync("teacher");
+            ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
             return View();
         }
 
         // POST: Courses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Teacher, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CourseName,CourseDescription,Teacher")] Course course)
         {
-            var users = _userManager.Users.ToList();
-            ViewBag.Teachers = new SelectList(users, "Id", "UserName");
-            if (ModelState.IsValid)
-            {
-                var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
+            //Populate dropdown with teachers
+            var teachers = await _userManager.GetUsersInRoleAsync("teacher");
+            ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
+            //Save teacher and course
+            var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
                 course.Teacher = teacher;
                 _context.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-          
-            return View(course);
         }
 
         // GET: Courses/Edit/5
@@ -104,6 +125,7 @@ namespace StudentPortalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CourseName,CourseDescription,Teacher")] Course course)
         {
+            //Populate dropdown of teachers fore edit page
             var users = _userManager.Users.ToList();
             ViewBag.Teachers = new SelectList(users, "Id", "UserName");
             if (id != course.Id)
@@ -176,6 +198,69 @@ namespace StudentPortalProject.Controllers
         private bool CourseExists(int id)
         {
           return _context.Course.Any(e => e.Id == id);
+        }
+
+        /*
+         * Function to get students to add to the course
+         */
+        [HttpGet]
+        [Authorize(Roles = "Teacher, Admin")]
+        public async Task<IActionResult> AddStudents(int id)
+        {
+            //Gets list of students
+            var students = await _userManager.GetUsersInRoleAsync("student");
+            //Populates multiselect
+            ViewBag.Students = new MultiSelectList(students, "Id", "UserName");
+            return View(new AddStudentsViewModel { CourseId = id });
+        }
+
+        /*
+         * Function to save student to a course
+         */
+        [HttpPost]
+        [Authorize(Roles = "Teacher, Admin")]
+        public async Task<IActionResult> AddStudents(AddStudentsViewModel model)
+        {
+            var course = await _context.Course.FindAsync(model.CourseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                //Creates enrollment object with a course and student
+                foreach (var studentId in model.SelectedStudents)
+                {
+                    var student = await _context.ApplicationUsers.FindAsync(studentId);
+                    if (student != null)
+                    {
+                        var enrollment = new Enrollment
+                        {
+                            Course = course,
+                            Student = student
+                        };
+                        _context.Enrollments.Add(enrollment);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Courses", new { id = model.CourseId });
+            }
+            return View();
+        }
+
+        /*
+         * Function to display a list of students in a course
+         */
+        public async Task<IActionResult> ClassList(int id)
+        {
+            var course = await _context.Course
+                .Include(c => c.Students)
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            return View(course);
         }
     }
 }

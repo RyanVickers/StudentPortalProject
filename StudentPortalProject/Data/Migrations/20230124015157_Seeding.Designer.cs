@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortalProject.Data;
 
@@ -11,9 +12,10 @@ using StudentPortalProject.Data;
 namespace StudentPortalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230124015157_Seeding")]
+    partial class Seeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,7 +354,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Enrollment", b =>

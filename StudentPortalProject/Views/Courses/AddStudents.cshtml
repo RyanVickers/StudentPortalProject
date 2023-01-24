@@ -1,0 +1,14 @@
+﻿@model AddStudentsViewModel
+
+<h2>Add Students to the Course</h2>
+
+<form asp-action="AddStudents" method="post">
+    <input type="hidden" asp-for="CourseId" />
+    <div class="form-group">
+        <label>Select Students:</label>
+        <select asp-for="SelectedStudents" asp-items="ViewBag.Students" multiple class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Add Students" class="btn btn-primary" />
+    </div>
+</form>

@@ -6,7 +6,7 @@ using System.Data;
 
 namespace StudentPortalProject.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   
     public class RoleManagerController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;

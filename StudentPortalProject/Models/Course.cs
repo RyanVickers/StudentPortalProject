@@ -8,6 +8,8 @@ namespace StudentPortalProject.Models
         public int Id { get; set; }
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
-        public IdentityUser Teacher { get; set; }
+        public string TeacherId { get; set; }
+        public ApplicationUser Teacher { get; set; }
+        public virtual ICollection<ApplicationUser> Students { get; set; }
     }
 }

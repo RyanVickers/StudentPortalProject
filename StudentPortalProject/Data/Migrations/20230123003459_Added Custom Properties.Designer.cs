@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortalProject.Data;
 
@@ -11,9 +12,10 @@ using StudentPortalProject.Data;
 namespace StudentPortalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230123003459_Added Custom Properties")]
+    partial class AddedCustomProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,29 +49,6 @@ namespace StudentPortalProject.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            ConcurrencyStamp = "612c8894-302c-434c-9e91-de9437d6c709",
-                            Name = "Student",
-                            NormalizedName = "STUDENT"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            ConcurrencyStamp = "95c17dee-ecd6-465a-9688-e2f97f94f13f",
-                            Name = "Teacher",
-                            NormalizedName = "TEACHER"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            ConcurrencyStamp = "ef14cebf-2782-4991-a658-19296cdf8ba7",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -159,23 +138,6 @@ namespace StudentPortalProject.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "1",
-                            RoleId = "1"
-                        },
-                        new
-                        {
-                            UserId = "2",
-                            RoleId = "2"
-                        },
-                        new
-                        {
-                            UserId = "3",
-                            RoleId = "3"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -270,62 +232,6 @@ namespace StudentPortalProject.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "a6195214-3018-464d-aa35-eb166829ccb4",
-                            Email = "student@test.com",
-                            EmailConfirmed = true,
-                            FirstName = "Student",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "STUDENT@TEST.COM",
-                            NormalizedUserName = "STUDENT@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPqFwLR2vOA7AC12y7RfBBKxheMlaOhNSoz6WC15BfDQYzjFhFTmAI0XGdPVfBCTnA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "ebdab893-ea7e-4819-8c04-03f25cc266da",
-                            TwoFactorEnabled = false,
-                            UserName = "student@test.com"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4150740b-1cfd-4f6e-975a-0f1f7fd745eb",
-                            Email = "teacher@test.com",
-                            EmailConfirmed = true,
-                            FirstName = "Teacher",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEACHER@TEST.COM",
-                            NormalizedUserName = "TEACHER@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBX+AA/JbonrPfYGgFrDOMo8jmJgf3u3BzHNnOCtm0X+cVVKDVhwqkpDDw/YyCyvdw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "27603306-fdb4-48c2-830e-bef0e1cb8784",
-                            TwoFactorEnabled = false,
-                            UserName = "teacher@test.com"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "8295e470-5356-4c7b-bb4f-c65f9b068979",
-                            Email = "admin@test.com",
-                            EmailConfirmed = true,
-                            FirstName = "Admin",
-                            LastName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@TEST.COM",
-                            NormalizedUserName = "ADMIN@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHATB3LKoj7ek6AP+HeZfhxolZMIAbfhmdaILUk6Mb+ao4mfcwjpautSoxQpqz6vnQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "7f9f884f-47e7-4194-b569-b1ff24fa0db5",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@test.com"
-                        });
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Course", b =>
@@ -345,29 +251,13 @@ namespace StudentPortalProject.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeacherId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Course", (string)null);
-                });
-
-            modelBuilder.Entity("StudentPortalProject.Models.Enrollment", b =>
-                {
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CourseId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -425,30 +315,9 @@ namespace StudentPortalProject.Data.Migrations
                 {
                     b.HasOne("StudentPortalProject.Models.ApplicationUser", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("StudentPortalProject.Models.Enrollment", b =>
-                {
-                    b.HasOne("StudentPortalProject.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentPortalProject.Models.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }
