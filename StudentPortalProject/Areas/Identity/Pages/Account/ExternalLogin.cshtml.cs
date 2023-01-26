@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using StudentPortalProject.Models;
 
+
 namespace StudentPortalProject.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
@@ -156,6 +157,9 @@ namespace StudentPortalProject.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+                user.LastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
