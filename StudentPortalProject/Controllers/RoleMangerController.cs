@@ -2,18 +2,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
+using StudentPortalProject.Data;
 
 namespace StudentPortalProject.Controllers
 {
-   
+    [Authorize(Roles = "Admin")]
     public class RoleManagerController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        public RoleManagerController(RoleManager<IdentityRole> roleManager)
+        private readonly ApplicationDbContext _context;
+
+        public RoleManagerController(RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
+            _context = context;
             _roleManager = roleManager;
         }
+
+        // GET: Roles
         public async Task<IActionResult> Index()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -29,6 +34,6 @@ namespace StudentPortalProject.Controllers
             return RedirectToAction("Index");
         }
 
-       
+
     }
 }

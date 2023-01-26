@@ -1,30 +1,31 @@
-﻿@model IEnumerable<StudentPortalProject.Models.Course>
+﻿@model IEnumerable<global::StudentPortalProject.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Courses</h1>
 @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
 {
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+	<p>
+		<a asp-action="Create">Create New</a>
+	</p>
 }
 <div class="container">
-    <div class="row">
-        @foreach (var course in Model)
-        {
-                <div class="col-md-4">
-                <a class="link-unstyled" href="@Url.Action("Details", "Courses", new { id = course.Id })">
-                        <div class="card clickable">
-                            <div class="card-body">
-                                <h5 class="card-title">@course.CourseName</h5>
-                                <p class="card-text">@course.CourseDescription</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-        }
-    </div>
+	<div class="row row-cols-3 row-cols-md-2 g-4">
+		@foreach (var course in Model)
+		{
+			<div class="col">
+				<a class="link-unstyled" href="@Url.Action("Details", "Courses", new { id = course.Id })">
+					<div class="course-card card clickable">
+						<h5 class="course-name card-title">@course.CourseName</h5>
+						<div class="card-body">
+							<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
+							<p class="card-text">@course.CourseDescription</p>
+						</div>
+					</div>
+					</a>
+			</div>
+		}
+	</div>
 </div>

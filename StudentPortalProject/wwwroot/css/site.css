@@ -8,13 +8,19 @@ html {
   }
 }
 
+:root {
+    --main-blue: #00427a;
+    --main-green: #51830e;
+    --dark-blue: #002749;
+}
+
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .link-unstyled {
@@ -41,3 +47,88 @@ body {
         text-decoration: none;
     }
 
+.navbar-brand h1{
+    color: var(--main-blue);
+    display: inline;
+}
+
+    .navbar-brand img {
+        height: 25%;
+        width: 25%;
+        overflow: hidden;
+        margin-top: -6px;
+        padding-right: 5%;
+    }
+
+body {
+    color: var(--dark-blue);
+    background: var(--dark-blue);
+    background: linear-gradient(0deg, rgba(0,39,73,1) 0%, rgba(0,66,122,1) 100%);
+}
+header, nav{
+    background: white;
+}
+
+.main-content {
+    background: white;
+    border-radius: 10px;
+    margin: auto;
+    padding: 5%;
+    width: auto;
+}
+
+footer {
+    background: white;
+}
+
+.navbar-content {
+    text-align: right;
+}
+
+/*--------- HOME - INDEX ---------*/
+
+button {
+    border-radius: 5px;
+    background: var(--main-blue);
+    color: white;
+    width: 200px;
+    height: 40px;
+}
+
+button a {
+    color: white;
+    text-decoration: none;
+}
+
+.green-button {
+    background: var(--main-green);
+    border-color: var(--main-green);
+    
+}
+
+.welcome-content {
+    display: block;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
+
+.welcome-link {
+    color: var(--main-blue);
+}
+
+/*--------- COURSES LIST ---------*/
+
+.course-card {
+    border-radius: 5px;
+}
+
+.course-name {
+    background: var(--main-green);
+    color: white;
+    text-align: center;
+}
+
+.course-teacher {
+    font-weight: bold;
+}
