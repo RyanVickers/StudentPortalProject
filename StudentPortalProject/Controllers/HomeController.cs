@@ -15,7 +15,11 @@ namespace StudentPortalProject.Controllers
 
         public IActionResult Index()
         {
-            return View();
+			if (User.Identity.IsAuthenticated)
+			{
+				return Redirect("/Courses");
+			}else
+			return View();
         }
 
         public IActionResult Privacy()
