@@ -1,0 +1,30 @@
+﻿@model Course
+
+
+<h1>@Model.CourseName</h1>
+
+<h2>Lectures</h2>
+<a asp-action="CreateLecture" asp-route-id="@Model.Id">Create Lecture</a>
+<div class="row">
+    @foreach (var lecture in Model.Lectures)
+    {
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3>@lecture.Title</h3>
+                    <p>@lecture.Description</p>
+
+                    <ul>
+                        @foreach (var file in lecture.LectureFiles)
+                        {
+                            <li>
+                                <a href="@Url.Action("DownloadFile", "Courses", new { id = file.Id })">@file.FileName</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

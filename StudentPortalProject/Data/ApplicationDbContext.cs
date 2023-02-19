@@ -14,7 +14,8 @@ namespace StudentPortalProject.Data
         public DbSet<Course> Course { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-
+        public DbSet<Lecture> Lectures { get; set; }
+        public DbSet<LectureFile> LectureFiles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

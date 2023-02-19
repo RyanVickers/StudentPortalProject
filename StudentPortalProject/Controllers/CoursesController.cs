@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
+using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 using System.Data;
 
@@ -263,5 +264,95 @@ namespace StudentPortalProject.Controllers
 			}
 			return View(course);
 		}
-	}
+
+        public IActionResult DownloadFile(int id)
+        {
+            var file = _context.LectureFiles.Find(id);
+
+            if (file == null)
+            {
+                return NotFound();
+            }
+
+            return File(file.FileData, "application/octet-stream", file.FileName);
+        }
+
+        /*
+		 * Function to get lectures view
+		 */
+        public async Task<IActionResult> Lectures(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course.Include(c => c.Lectures).ThenInclude(l => l.LectureFiles).FirstOrDefaultAsync(m => m.Id == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
+
+        /*
+		 * Function to get create lectures view
+		 */
+        public IActionResult CreateLecture(int id)
+        {
+            var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            var model = new Lecture { CourseId = id };
+
+            return View(model);
+        }
+
+        /*
+		 * Function to create lectures
+		 */
+        [HttpPost]
+        public async Task<IActionResult> CreateLecture(int id, [Bind("Title,Description")] Lecture lecture, IFormFileCollection files)
+        {
+            var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            if (files != null && files.Count > 0)
+            {
+                foreach (var file in files)
+                {
+                  
+                        using (var ms = new MemoryStream())
+                        {
+                            await file.CopyToAsync(ms);
+                            var fileData = ms.ToArray();
+
+                            var newFile = new LectureFile
+                            {
+                                FileName = file.FileName,
+								FileData = fileData,
+                                Lecture = lecture,	
+                            };
+                        lecture.LectureFiles.Add(newFile);
+                    }     
+                }
+            }
+
+            lecture.Course = course; 
+			_context.Lectures.Add(lecture);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Lectures", new { id = course.Id });
+        }
+
+    }
 }
