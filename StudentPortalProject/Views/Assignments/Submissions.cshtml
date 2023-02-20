@@ -1,0 +1,33 @@
+﻿@model Assignment
+
+@{
+    ViewData["Title"] = "Submissions";
+}
+
+<h1>@Model.Title Submissions</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Submission Date</th>
+            <th>Files</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var submission in Model.AssignmentSubmissions)
+        {
+            <tr>
+                <td>@submission.Student.FirstName + @submission.Student.LastName</td>
+                <td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+                <td>
+                    @foreach (var file in submission.SubmissionFiles)
+                    {
+                        <a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="SubmissionFile">@file.FileName</a>
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

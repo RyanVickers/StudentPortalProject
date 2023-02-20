@@ -12,5 +12,6 @@ namespace StudentPortalProject.Models
         public ApplicationUser Teacher { get; set; }
         public virtual ICollection<ApplicationUser> Students { get; set; }
         public virtual ICollection<Lecture> Lectures { get; set; }
+        public virtual ICollection<Assignment> Assignments { get; set; }
     }
 }

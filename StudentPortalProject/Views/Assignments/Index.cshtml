@@ -1,0 +1,71 @@
+﻿@model Course
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@Model.CourseName</h1>
+
+<p>
+    <a asp-controller="Assignments" asp-action="Create" asp-route-id="@Model.Id">Create New</a>
+</p>
+
+<h2>Assignments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Assignments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @{
+                        var DueDate = item.DueDate.ToString("dd/MM/yyyy hh:mm tt");
+                    }
+                    @Html.DisplayFor(modelItem => DueDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="SubmitAssignment" asp-route-id="@item.Id">Submit Assignment</a> |
+                    <a asp-action="Submissions" asp-route-id="@item.Id">Submissions</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4">
+                    <h5>Files:</h5>
+                    @if (item.AssignmentFiles != null)
+                    {
+                        foreach (var file in item.AssignmentFiles)
+                        {
+                            <div>
+                                <a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="AssignmentFile">@file.FileName</a>
+                            </div>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
