@@ -14,12 +14,13 @@ namespace StudentPortalProject.Data
         public DbSet<Course> Course { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
-        public DbSet<LectureFile> LectureFiles { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; }
-        public DbSet<SubmissionFile> SubmissionFiles { get; set; }
+        public DbSet<LectureFile> LectureFiles { get; set; }
         public DbSet<AssignmentFile> AssignmentFiles { get; set; }
+        public DbSet<SubmissionFile> SubmissionFiles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -103,5 +104,6 @@ namespace StudentPortalProject.Data
 
         }
         public DbSet<StudentPortalProject.Models.Assignment> Assignment { get; set; }
+        public DbSet<StudentPortalProject.Models.Announcement> Announcement { get; set; }
     }
 }

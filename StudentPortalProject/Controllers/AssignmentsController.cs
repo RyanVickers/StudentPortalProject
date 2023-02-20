@@ -344,5 +344,23 @@ namespace StudentPortalProject.Controllers
                 return BadRequest("Invalid file type.");
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Grade(int id, int submissionId, int grade)
+        {
+            var submission = await _context.AssignmentSubmissions.FindAsync(submissionId);
+
+            if (submission == null)
+            {
+                return NotFound();
+            }
+
+            submission.Grade = grade;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Submissions","Assignments", new { id = submission.AssignmentId });
+        }
     }
 }

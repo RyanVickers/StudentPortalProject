@@ -12,6 +12,7 @@
             <th>Student</th>
             <th>Submission Date</th>
             <th>Files</th>
+            <th>Grade</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,20 @@
                         <br />
                     }
                 </td>
+                @if (User.IsInRole("Teacher"))
+                {
+                    <td>
+                        <form asp-action="Grade" asp-controller="Assignments" method="post">
+                            <input type="hidden" name="submissionId" value="@submission.Id" />
+                            <input type="number" name="grade" step="0.1" value="@submission.Grade" />
+                            <button type="submit">Submit</button>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td>@submission.Grade</td>
+                }
             </tr>
         }
     </tbody>
