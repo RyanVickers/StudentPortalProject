@@ -16,8 +16,10 @@
                     <ul>
                         @foreach (var file in lecture.LectureFiles)
                         {
+                            var lecFile = Url.Action("DownloadFile", "Lectures", new { id = file.Id });
+                            <img src="@lecFile" />
                             <li>
-                                <a href="@Url.Action("DownloadFile", "Lectures", new { id = file.Id })">@file.FileName</a>
+                                <a href="@lecFile">@file.FileName</a>
                             </li>
                         }
                     </ul>
