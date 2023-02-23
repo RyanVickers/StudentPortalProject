@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortalProject.Data;
 
@@ -11,9 +12,10 @@ using StudentPortalProject.Data;
 namespace StudentPortalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230223194202_GroupUpdate")]
+    partial class GroupUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +54,21 @@ namespace StudentPortalProject.Data.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "abf9a2c3-623c-4447-b737-b1cf5ab88904",
+                            ConcurrencyStamp = "a4899d28-43f9-44e7-a8bd-679dd5283635",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "d595b4cc-ffe5-4e04-8d64-940a14d7d39b",
+                            ConcurrencyStamp = "d76ec9bb-83b9-4faf-b848-48a9937812b5",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "c3968de4-17a4-4a86-b677-f1c5855f82ab",
+                            ConcurrencyStamp = "21f86164-e73a-4ebb-b4c3-466994c3ad4d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -305,7 +307,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "848d8828-c7ef-43dc-927a-46a8387a81ff",
+                            ConcurrencyStamp = "a32280d8-e832-4557-aede-d64ebdbccbd2",
                             Email = "student@test.com",
                             EmailConfirmed = true,
                             FirstName = "Student",
@@ -313,9 +315,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STUDENT@TEST.COM",
                             NormalizedUserName = "STUDENT@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIHYGRfE0XG7zMrLxt6Ed/GIKZQgEiAP1tCxDXDyqJHJ+F/O7z84QEbhDKbrvra41A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEHyCqsKjpyRPFj+VFu5Jq0Xu3NzpIMEqaqhJoSyyhT2OJyxdyGq8HO2qoopYURR+Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b04d131d-a0b5-425a-96cb-fa5bd7eab795",
+                            SecurityStamp = "528837c0-deae-4c7e-9a32-6b08b60022b9",
                             TwoFactorEnabled = false,
                             UserName = "student@test.com"
                         },
@@ -323,7 +325,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe6e1ab0-8246-4929-9009-e04438b7e0b2",
+                            ConcurrencyStamp = "98eb9726-47fc-454d-bdea-01bfaa60cddf",
                             Email = "teacher@test.com",
                             EmailConfirmed = true,
                             FirstName = "Teacher",
@@ -331,9 +333,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEACHER@TEST.COM",
                             NormalizedUserName = "TEACHER@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA6bt/qYOkuDAhmyYJjchFfCRtI5Glc5QQmDz3coZdmAm2UImCke+LgVgivsxN+kbA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEG2gifLyCNE0DQG5A7QwE9ofcgLa8dm5WNcuHFX15VXNjENNgecc2KD+2ffL/WX57A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "25a4bf7e-8731-47b9-8069-67287adad345",
+                            SecurityStamp = "14a75c7c-4831-4a4c-a320-e36011ddf800",
                             TwoFactorEnabled = false,
                             UserName = "teacher@test.com"
                         },
@@ -341,7 +343,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d8f287b1-34ad-4b9b-aca4-18f7ef9158df",
+                            ConcurrencyStamp = "6aacde1a-fa49-48b7-a592-edc54d760d19",
                             Email = "admin@test.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -349,9 +351,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@TEST.COM",
                             NormalizedUserName = "ADMIN@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAYLzgudHsnGgr3AvRhuCjeR744uwF9R9BLTSsGaEF7YJ30zefELA3IJ7ZCCzuJHWA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIn+NeGgKfZSOhnMXJUwCtlp2EPdInpg9gD7AGtH/GEiBhb8RfzKrt6qwtJlGlqaCQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f1cf7788-3610-4c5b-9e21-00f07fa6d861",
+                            SecurityStamp = "02c419fe-8dc4-4301-a739-ad1055f82fd5",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
                         });
@@ -504,21 +506,6 @@ namespace StudentPortalProject.Data.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("StudentPortalProject.Models.GroupMember", b =>
-                {
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("GroupId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Lecture", b =>
@@ -741,25 +728,6 @@ namespace StudentPortalProject.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("StudentPortalProject.Models.GroupMember", b =>
-                {
-                    b.HasOne("StudentPortalProject.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentPortalProject.Models.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Lecture", b =>

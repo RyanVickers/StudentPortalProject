@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace StudentPortalProject.Models
+﻿namespace StudentPortalProject.Models
 {
     public class Group
     {
