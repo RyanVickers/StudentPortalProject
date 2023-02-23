@@ -5,7 +5,7 @@
 }
 
 <h1>Courses</h1>
-@if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+@if (User.IsInRole("Admin"))
 {
 	<p>
 		<a asp-action="Create">Create New</a>
@@ -23,8 +23,15 @@
 							<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
 							<p class="card-text">@course.CourseDescription</p>
 						</div>
+						@if (User.IsInRole("Admin"))
+						{
+							<div class="card-footer">
+								<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Courses", new { id = course.Id })">Edit</a>
+								<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Courses", new { id = course.Id })">Delete</a>
+							</div>
+						}
 					</div>
-					</a>
+				</a>
 			</div>
 		}
 	</div>

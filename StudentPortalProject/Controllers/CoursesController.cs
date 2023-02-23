@@ -75,6 +75,7 @@ namespace StudentPortalProject.Controllers
 		}
 
 		// GET: Courses/Create
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> CreateAsync()
 		{
 			//Populate dropdown with teachers
@@ -86,7 +87,7 @@ namespace StudentPortalProject.Controllers
 		// POST: Courses/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[Authorize(Roles = "Teacher, Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("Id,CourseName,CourseDescription,Teacher")] Course course)
@@ -103,6 +104,7 @@ namespace StudentPortalProject.Controllers
 		}
 
 		// GET: Courses/Edit/5
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null || _context.Course == null)
@@ -115,8 +117,9 @@ namespace StudentPortalProject.Controllers
 			{
 				return NotFound();
 			}
-			var users = _userManager.Users.ToList();
-			ViewBag.Teachers = new SelectList(users, "Id", "UserName");
+			//Populate dropdown with teachers
+			var teachers = await _userManager.GetUsersInRoleAsync("teacher");
+			ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
 			return View(course);
 		}
 
@@ -125,18 +128,16 @@ namespace StudentPortalProject.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> Edit(int id, [Bind("Id,CourseName,CourseDescription,Teacher")] Course course)
 		{
-			//Populate dropdown of teachers fore edit page
-			var users = _userManager.Users.ToList();
-			ViewBag.Teachers = new SelectList(users, "Id", "UserName");
+			//Populate dropdown with teachers
+			var teachers = await _userManager.GetUsersInRoleAsync("teacher");
+			ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
 			if (id != course.Id)
 			{
 				return NotFound();
 			}
-
-			if (ModelState.IsValid)
-			{
 				try
 				{
 					var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
@@ -156,12 +157,11 @@ namespace StudentPortalProject.Controllers
 					}
 				}
 				return RedirectToAction(nameof(Index));
-			}
-			return View(course);
 		}
 
-		// GET: Courses/Delete/5
-		public async Task<IActionResult> Delete(int? id)
+        // GET: Courses/Delete/5
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int? id)
 		{
 			if (id == null || _context.Course == null)
 			{
@@ -181,6 +181,7 @@ namespace StudentPortalProject.Controllers
 		// POST: Courses/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			if (_context.Course == null)
