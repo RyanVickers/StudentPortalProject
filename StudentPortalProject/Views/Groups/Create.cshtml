@@ -18,11 +18,18 @@
                 <span asp-validation-for="GroupName" class="text-danger"></span>
             </div>
             @{
+                // Allow admin to create groups for any course
                 if (User.IsInRole("Admin"))
                 {
                     <div class="form-group">
                         <label asp-for="CourseId" class="control-label"></label>
                         <select asp-for="CourseId" class ="form-control" asp-items="ViewBag.CourseId"></select>
+                    </div>
+                } else
+                {
+                    <div class="form-group" hidden>
+                        <label asp-for="CourseId" class="control-label"></label>
+                        <select asp-for="CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
                     </div>
                 }
             }

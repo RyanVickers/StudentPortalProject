@@ -62,8 +62,8 @@ namespace StudentPortalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,GroupName,CourseId")] Group @group)
         {
-            var course = await _context.Course.FindAsync(group.CourseId);
-            group.Course = course;
+            //var course = await _context.Course.FindAsync(group.CourseId);
+            //group.Course = course;
             _context.Add(group);
             await _context.SaveChangesAsync();
             return View(@group);

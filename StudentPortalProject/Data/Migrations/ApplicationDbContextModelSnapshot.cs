@@ -225,7 +225,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Announcement");
+                    b.ToTable("Announcement", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.ApplicationUser", b =>
@@ -383,7 +383,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Assignment");
+                    b.ToTable("Assignment", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.AssignmentFile", b =>
@@ -409,7 +409,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("AssignmentFiles");
+                    b.ToTable("AssignmentFiles", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.AssignmentSubmission", b =>
@@ -439,7 +439,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("AssignmentSubmissions");
+                    b.ToTable("AssignmentSubmissions", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Course", b =>
@@ -466,7 +466,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Course");
+                    b.ToTable("Course", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Enrollment", b =>
@@ -503,7 +503,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.GroupMember", b =>
@@ -518,7 +518,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("GroupMembers");
+                    b.ToTable("GroupMembers", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Lecture", b =>
@@ -544,7 +544,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lectures");
+                    b.ToTable("Lectures", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.LectureFile", b =>
@@ -570,7 +570,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("LectureId");
 
-                    b.ToTable("LectureFiles");
+                    b.ToTable("LectureFiles", (string)null);
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.SubmissionFile", b =>
@@ -596,7 +596,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("SubmissionFiles");
+                    b.ToTable("SubmissionFiles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
