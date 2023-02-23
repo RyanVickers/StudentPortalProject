@@ -1,8 +1,13 @@
-﻿namespace StudentPortalProject.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StudentPortalProject.Models
 {
     public class Group
     {
-        public Course Course { get; set; }      // What course is this group tied to
-        public virtual ICollection<ApplicationUser> Members { get; set; }       // The students that are members
+        public int Id { get; set; }
+        public string GroupName { get; set; }
+        // What course is this group tied to
+        public int CourseId { get; set; }
+        public virtual Course Course { get; set; }
     }
 }

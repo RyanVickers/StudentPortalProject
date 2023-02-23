@@ -1,0 +1,20 @@
+﻿@model Course
+
+<h2>@Model.CourseName - Groups</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Group Name</th>
+            <a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Create", "Groups", Model.Id)">Create</a>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var group in Model.Groups)
+        {
+                    <tr>
+                        <td>@group.GroupName</td>
+                    </tr>
+        }
+    </tbody>
+</table>

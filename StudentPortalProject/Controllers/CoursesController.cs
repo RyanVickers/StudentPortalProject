@@ -266,6 +266,19 @@ namespace StudentPortalProject.Controllers
 			return View(course);
 		}
 
-
+		/*
+		 *  Function to display a list of groups within the course
+		 */
+		public async Task<IActionResult> GroupList(int id)
+		{
+			var groups = await _context.Course
+				.Include(c => c.Groups)
+				.FirstOrDefaultAsync(c => c.Id == id);
+			if(groups == null)
+			{
+				return NotFound();
+			}
+			return View(groups);
+		}
     }
 }

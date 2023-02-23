@@ -21,6 +21,7 @@ namespace StudentPortalProject.Data
         public DbSet<LectureFile> LectureFiles { get; set; }
         public DbSet<AssignmentFile> AssignmentFiles { get; set; }
         public DbSet<SubmissionFile> SubmissionFiles { get; set; }
+        public DbSet<Group> Groups { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -100,7 +101,6 @@ namespace StudentPortalProject.Data
               .WithMany()
               .HasForeignKey(x => x.TeacherId)
               .OnDelete(DeleteBehavior.Restrict);
-
 
         }
         public DbSet<StudentPortalProject.Models.Assignment> Assignment { get; set; }
