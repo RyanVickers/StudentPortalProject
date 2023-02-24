@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -70,26 +71,76 @@ namespace StudentPortalProject.Controllers
             return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
         }
 
-        // GET: Groups/Edit/5
-        public async Task<IActionResult> Edit(int? groupId, int? courseId)
+        // GET: Add students to the group
+        [HttpGet]
+        public async Task<IActionResult> AddStudents(int groupId)
         {
             if (groupId == null || _context.Groups == null)
             {
                 return NotFound();
             }
 
-            var group = await _context.Groups.FindAsync(groupId);
+            var @group = await _context.Groups.FindAsync(groupId);
+            if (@group == null)
+            {
+                return NotFound();
+            }
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
+
+            var students = await _context.Course
+                .Include(c => c.Students)
+                .FirstOrDefaultAsync(c => c.Id == group.CourseId);
+            ViewBag.Students = new MultiSelectList(students.Students, "Id", "UserName");
+
+            return View(new AddStudentsViewModel { CourseId = groupId });
+        }
+
+        // POST: Add students to the group
+        [HttpPost]
+        public async Task<IActionResult> AddStudents(AddStudentsViewModel model)
+        {
+            var group = await _context.Groups.FindAsync(model.CourseId);
             if (group == null)
             {
                 return NotFound();
             }
-            var students = await _context.Course
-                .Include(c => c.Students)
-                .FirstOrDefaultAsync(c => c.Id == courseId);
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", courseId);
-            // Contains all the students that are in this course
-            ViewBag.Students = students.Students;
-            return View(group);
+            if (ModelState.IsValid)
+            {
+                //Creates GroupMember object with a group and student
+                foreach (var studentId in model.SelectedStudents)
+                {
+                    var student = await _context.ApplicationUsers.FindAsync(studentId);
+                    if (student != null)
+                    {
+                        var grpMember = new GroupMember
+                        {
+                            Group = group,
+                            Student = student
+                        };
+                        _context.GroupMembers.Add(grpMember);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
+            }
+            return View();
+        }
+
+        // GET: Groups/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Groups == null)
+            {
+                return NotFound();
+            }
+
+            var @group = await _context.Groups.FindAsync(id);
+            if (@group == null)
+            {
+                return NotFound();
+            }
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
+            return View(@group);
         }
 
         // POST: Groups/Edit/5

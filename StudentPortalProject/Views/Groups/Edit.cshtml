@@ -9,8 +9,8 @@
 <h4>Group</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <form asp-action="Edit">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -18,33 +18,36 @@
                 <input asp-for="GroupName" class="form-control" />
                 <span asp-validation-for="GroupName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="CourseId" class="control-label"></label>
                 <select asp-for="CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
                 <span asp-validation-for="CourseId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-    <div class="col-md-8">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var student in ViewBag.Students) // Display all students in the course
-                {
+        </div>
+        <div class="col-md-4">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@student.UserName</td>
+                        <th>Student Name</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var student in ViewBag.Students) // Display all students in the course
+                    {
+                        <tr>
+                            <td>
+                                @student.UserName
+                                <input class="form-check-input float-end" type="checkbox" value="@student" id="flexCheckDefault">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>
