@@ -28,6 +28,23 @@
             </div>
         </form>
     </div>
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in ViewBag.Students) // Display all students in the course
+                {
+                    <tr>
+                        <td>@student.UserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div>

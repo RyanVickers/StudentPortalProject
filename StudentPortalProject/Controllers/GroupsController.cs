@@ -71,20 +71,25 @@ namespace StudentPortalProject.Controllers
         }
 
         // GET: Groups/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? groupId, int? courseId)
         {
-            if (id == null || _context.Groups == null)
+            if (groupId == null || _context.Groups == null)
             {
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var group = await _context.Groups.FindAsync(groupId);
+            if (group == null)
             {
                 return NotFound();
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
-            return View(@group);
+            var students = await _context.Course
+                .Include(c => c.Students)
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", courseId);
+            // Contains all the students that are in this course
+            ViewBag.Students = students.Students;
+            return View(group);
         }
 
         // POST: Groups/Edit/5

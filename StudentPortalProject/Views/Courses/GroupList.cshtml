@@ -18,7 +18,7 @@
                 <td>
                     @group.GroupName
                     <a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Delete</a>
-                    <a class="float-end btn btn-sm btn-warning mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Edit</a>
+                    <a class="float-end btn btn-sm btn-warning mr-1" href="@Url.Action("Edit", "Groups", new{groupId = group.Id, courseId = Model.Id})">Edit</a>
                 </td>
             </tr>
         }
