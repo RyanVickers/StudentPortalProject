@@ -28,10 +28,8 @@
                     </div>
                 } else
                 {
-                    <div class="form-group" hidden>
-                        <label asp-for="CourseId" class="control-label"></label>
-                        <input asp-for="CourseId" class="form-control" value="ViewBag.CourseId"></input>
-                    </div>
+                    <label asp-for="CourseId" class="control-label"></label>
+                    <input hidden asp-for="CourseId" value="@courseId"/>
                 }
             }
             <div class="form-group">

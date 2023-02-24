@@ -62,7 +62,7 @@ namespace StudentPortalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GroupName,CourseId")] Group @group)
+        public async Task<IActionResult> Create([Bind("GroupName,CourseId")] Group @group)
         {
             var course = await _context.Course.FindAsync(group.CourseId);
             group.Course = course;
