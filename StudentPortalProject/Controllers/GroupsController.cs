@@ -49,9 +49,10 @@ namespace StudentPortalProject.Controllers
         */
 
         // GET: Groups/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id");
+            ViewData["Courses"] = new SelectList(_context.Course, "Id", "Id");
+            ViewBag.CourseId = id;
             return View();
         }
 

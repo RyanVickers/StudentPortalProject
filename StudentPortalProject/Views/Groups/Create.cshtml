@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var courseId = ViewBag.CourseId;
 }
 
 <h1>Create</h1>
@@ -23,25 +24,25 @@
                 {
                     <div class="form-group">
                         <label asp-for="CourseId" class="control-label"></label>
-                        <select asp-for="CourseId" class ="form-control" asp-items="ViewBag.CourseId"></select>
+                        <select asp-for="CourseId" class ="form-control" asp-items="ViewBag.Courses"></select>
                     </div>
                 } else
                 {
                     <div class="form-group" hidden>
                         <label asp-for="CourseId" class="control-label"></label>
-                        <select asp-for="CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
+                        <input asp-for="CourseId" class="form-control" value="ViewBag.CourseId"></input>
                     </div>
                 }
             }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
+        </form> 
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@courseId">Back to List</a>
 </div>
 
 @section Scripts {
