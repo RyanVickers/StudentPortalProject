@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
+using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 
 namespace StudentPortalProject.Controllers
@@ -37,7 +40,8 @@ namespace StudentPortalProject.Controllers
         }
 
         // GET: Lectures/Details/5
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Lectures == null)
             {
@@ -55,10 +59,11 @@ namespace StudentPortalProject.Controllers
             return View(lecture);
         }
 
-        /*
+		/*
 		 * Function to get create lectures view
 		 */
-        public IActionResult Create(int id)
+		[Authorize(Roles = "Admin,Teacher")]
+		public IActionResult Create(int id)
         {
             var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
 
@@ -76,7 +81,8 @@ namespace StudentPortalProject.Controllers
 		 * Function to create lectures
 		 */
         [HttpPost]
-        public async Task<IActionResult> Create(int id, [Bind("Title,Description")] Lecture lecture, IFormFileCollection files)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Create(int id, [Bind("Title,Description")] Lecture lecture, IFormFileCollection files)
         {
             var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
 
@@ -113,8 +119,9 @@ namespace StudentPortalProject.Controllers
             return RedirectToAction(nameof(Index), new { id });
         }
 
-        // GET: Lectures/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Lectures/Edit/5
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Lectures == null)
             {
@@ -126,7 +133,7 @@ namespace StudentPortalProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", lecture.CourseId);
+          
             return View(lecture);
         }
 
@@ -135,16 +142,23 @@ namespace StudentPortalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CourseId")] Lecture lecture)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CourseId")] Lecture lecture)
         {
             if (id != lecture.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == lecture.CourseId);
+
+            if (course == null)
             {
-                try
+                return NotFound();
+            }
+
+            lecture.Course = course;
+            try
                 {
                     _context.Update(lecture);
                     await _context.SaveChangesAsync();
@@ -160,14 +174,12 @@ namespace StudentPortalProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", lecture.CourseId);
-            return View(lecture);
+				return RedirectToAction(nameof(Index), new { id = lecture.CourseId });
         }
 
-        // GET: Lectures/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Lectures/Delete/5
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Lectures == null)
             {
@@ -184,9 +196,9 @@ namespace StudentPortalProject.Controllers
 
             return View(lecture);
         }
-
-        // POST: Lectures/Delete/5
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Roles = "Admin,Teacher")]
+		// POST: Lectures/Delete/5
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -199,10 +211,9 @@ namespace StudentPortalProject.Controllers
             {
                 _context.Lectures.Remove(lecture);
             }
-            
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+			return RedirectToAction(nameof(Index), new { id = lecture.CourseId });
+		}
 
         private bool LectureExists(int id)
         {

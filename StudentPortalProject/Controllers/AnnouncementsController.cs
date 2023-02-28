@@ -120,14 +120,14 @@ namespace StudentPortalProject.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Message,CourseId")] Announcement announcement, int CourseId)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Message,CourseId")] Announcement announcement)
         {
             if (id != announcement.Id)
             {
                 return NotFound();
             }
 
-            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == CourseId);
+            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == announcement.CourseId);
 
             if (course == null)
             {

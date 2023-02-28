@@ -46,6 +46,14 @@
 						}
 					</ul>
 				</div>
+				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+				{
+					<div class="card-footer">
+						<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Lectures", new { id = lecture.Id })">Edit</a>
+						<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Lectures", new { id = lecture.Id })">Delete</a>
+
+					</div>
+				}
 			</div>
 		</div>
 	}
