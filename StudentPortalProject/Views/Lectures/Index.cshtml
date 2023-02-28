@@ -1,43 +1,52 @@
 ﻿@model Course
 
+@{
+	ViewData["Title"] = "Lectures";
+}
+
+@await Html.PartialAsync("_CourseNavbar")
+
 <h1>@Model.CourseName</h1>
 
 <h2>Lectures</h2>
-<a asp-controller="Lectures" asp-action="Create" asp-route-id="@Model.Id">Create Lecture</a>
+@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+{
+	<a asp-controller="Lectures" asp-action="Create" asp-route-id="@Model.Id">Create Lecture</a>
+}
 <div class="row">
-    @foreach (var lecture in Model.Lectures)
-    {
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h3>@lecture.Title</h3>
-                    <p>@lecture.Description</p>
+	@foreach (var lecture in Model.Lectures)
+	{
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-body">
+					<h3>@lecture.Title</h3>
+					<p>@lecture.Description</p>
 
-                    <ul>
-                        @{
-                            string[] validTypes = {".png", ".jpg", ".jpeg"};
-                        }
-                        @foreach (var file in lecture.LectureFiles)
-                        {
-                            // DownloadFile is a function AssignmentsController
-                            // Lectures is a call to the controller class Lectures
-                            var lecFile = Url.Action("DownloadFile", "Lectures", new { id = file.Id });
-                            string ext = System.IO.Path.GetExtension(file.FileName);
-                            System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+ext);
+					<ul>
+						@{
+							string[] validTypes = { ".png", ".jpg", ".jpeg" };
+						}
+						@foreach (var file in lecture.LectureFiles)
+						{
+							// DownloadFile is a function AssignmentsController
+							// Lectures is a call to the controller class Lectures
+							var lecFile = Url.Action("DownloadFile", "Lectures", new { id = file.Id });
+							string ext = System.IO.Path.GetExtension(file.FileName);
+							System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + ext);
 
-                            // If the file thats been loaded is an image, display it
-                            if (validTypes.Contains(ext.ToLower()))
-                            {
-                                <img src="@lecFile"/>
-                            }
-                            
-                            <li>
-                                <a href="@lecFile">@file.FileName</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    }
+							// If the file thats been loaded is an image, display it
+							if (validTypes.Contains(ext.ToLower()))
+							{
+								<img src="@lecFile" />
+							}
+
+							<li>
+								<a href="@lecFile">@file.FileName</a>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	}
 </div>

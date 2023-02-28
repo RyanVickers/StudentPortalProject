@@ -1,6 +1,12 @@
 ﻿@model Course
 
-<h2>@Model.CourseName - Groups</h2>
+@{
+    ViewData["Title"] = "Groups";
+}
+@await Html.PartialAsync("_CourseNavbar")
+<h1>@Model.CourseName</h1>
+
+<h2>Groups</h2>
 
 <table class="table">
     <thead>

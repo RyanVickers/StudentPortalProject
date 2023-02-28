@@ -65,7 +65,8 @@ namespace StudentPortalProject.Controllers
 			}
 
 			var course = await _context.Course
-				.FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.Announcements)
+                .FirstOrDefaultAsync(m => m.Id == id);
 			if (course == null)
 			{
 				return NotFound();
@@ -100,7 +101,20 @@ namespace StudentPortalProject.Controllers
 			course.Teacher = teacher;
 			_context.Add(course);
 			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+
+            // Create default announcement for the course
+            var announcement = new Announcement
+            {
+                Title = "Welcome to " + course.CourseName + "!",
+                Message = "This is the default announcement for the " + course.CourseName + " course.",
+                Date = DateTime.Now,
+                Course = course
+            };
+
+            _context.Add(announcement);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
 		}
 
 		// GET: Courses/Edit/5
@@ -246,7 +260,7 @@ namespace StudentPortalProject.Controllers
 					}
 				}
 				await _context.SaveChangesAsync();
-				return RedirectToAction("Details", "Courses", new { id = model.CourseId });
+				return RedirectToAction(nameof(Index));
 			}
 			return View();
 		}

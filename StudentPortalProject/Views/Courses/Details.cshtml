@@ -1,43 +1,35 @@
 ﻿@model StudentPortalProject.Models.Course
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
-
+@await Html.PartialAsync("_CourseNavbar")
 <h1>@Model.CourseName</h1>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseDescription)
-        </dd>
-         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Teacher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Teacher.FirstName)
-            @Html.DisplayFor(model => model.Teacher.LastName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a> |
-    <a asp-controller="Announcements" asp-action="Index" asp-route-id="@Model.Id">Announcements</a> |
-    <a asp-action="AddStudents" asp-route-id="@Model.Id">Add Students</a> |
-    <a asp-action="ClassList" asp-route-id="@Model.Id">Class List</a> |
-    <a asp-action="GroupList" asp-route-id="@Model.Id">Groups</a> |
-    <a asp-controller="Lectures" asp-action="Index" asp-route-id="@Model.Id">View Lectures</a> |
-    <a asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.Id">Assignments</a>
+<h2>Announcements</h2>
 
+@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+{
+	<a asp-controller="Announcements" asp-action="Create" asp-route-id="@Model.Id">Create Announcement</a>
+}
+
+<div class="card-deck">
+	@foreach (var announcement in Model.Announcements)
+	{
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">@announcement.Title</h5>
+				<p class="card-text">@announcement.Message</p>
+			</div>
+			<div class="card-footer">
+				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+				{
+					<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Announcements", new { id = announcement.Id })">Edit</a>
+					<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Announcements", new { id = announcement.Id })">Delete</a>
+				}
+				<small class="text-muted">@announcement.Date.ToString("g")</small>
+
+			</div>
+		</div>
+	}
 </div>
