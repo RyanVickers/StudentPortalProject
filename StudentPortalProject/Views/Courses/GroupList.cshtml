@@ -23,8 +23,8 @@
             <tr>
                 <td>
                     @group.GroupName
-                    <a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Delete</a>
-                    <a class="float-end btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id})">Edit Members</a>
+                    <a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Delete", "Groups", new{id = group.Id})">Delete</a>
+                    <a class="float-end btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})">Edit Members</a>
                 </td>
             </tr>
         }

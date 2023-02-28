@@ -23,6 +23,7 @@ namespace StudentPortalProject.Data
         public DbSet<SubmissionFile> SubmissionFiles { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

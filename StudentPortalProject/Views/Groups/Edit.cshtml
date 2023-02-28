@@ -51,7 +51,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@Model.Course.Id">Back to List</a>
 </div>
 
 @section Scripts {

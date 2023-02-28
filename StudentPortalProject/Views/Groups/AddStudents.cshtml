@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Add Students";
+    var courseId = ViewBag.CourseId;
 }
 
 <h1>Edit</h1>
@@ -22,7 +23,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@courseId.SelectedValue">Back to List</a>
 </div>
 
 @section Scripts {

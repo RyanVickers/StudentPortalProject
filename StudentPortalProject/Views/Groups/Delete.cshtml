@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Delete";
+    var courseId = ViewBag.CourseId;
 }
 
 <h1>Delete</h1>
@@ -28,6 +29,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <div>
+            <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@courseId.SelectedValue">Back to List</a>
+        </div>
     </form>
 </div>

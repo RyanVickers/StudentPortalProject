@@ -73,8 +73,9 @@ namespace StudentPortalProject.Controllers
 
         // GET: Add students to the group
         [HttpGet]
-        public async Task<IActionResult> AddStudents(int groupId)
+        public async Task<IActionResult> AddStudents(int groupId, int courseId)
         {
+            ViewData["CourseId"] = courseId;
             if (groupId == null || _context.Groups == null)
             {
                 return NotFound();
@@ -176,10 +177,10 @@ namespace StudentPortalProject.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
-            return View(@group);
-        }
+			return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
+		}
 
-        /*
+        
         // GET: Groups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -189,14 +190,12 @@ namespace StudentPortalProject.Controllers
             }
 
             var @group = await _context.Groups
-                .Include(@ => @.Course)
-                .Include(@ => @.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
                 return NotFound();
             }
-
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
             return View(@group);
         }
 
@@ -210,15 +209,22 @@ namespace StudentPortalProject.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Groups'  is null.");
             }
             var @group = await _context.Groups.FindAsync(id);
+            var groupMembers = await _context.GroupMembers.Where(c => c.GroupId == id).ToListAsync();
+            if (groupMembers != null) {
+                foreach(var member in groupMembers)
+                {
+                    _context.GroupMembers.Remove(member);
+                }
+            }
             if (@group != null)
             {
                 _context.Groups.Remove(@group);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        */
+			return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
+		}
+        
         private bool GroupExists(int id)
         {
           return _context.Groups.Any(e => e.Id == id);

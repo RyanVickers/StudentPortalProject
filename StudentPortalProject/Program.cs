@@ -27,7 +27,13 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 // SignalR -- chat service
 builder.Services.AddSignalR();
 
+builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
 var app = builder.Build();
+app.MapControllerRoute(
+        name: "pusher_auth",
+        pattern: "pusher/auth",
+        defaults: new { controller = "Auth", action = "ChannelAuth" }
+);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
