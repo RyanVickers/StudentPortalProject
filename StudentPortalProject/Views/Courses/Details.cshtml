@@ -3,30 +3,44 @@
 @{
 	ViewData["Title"] = "Details";
 }
+
 @await Html.PartialAsync("_CourseNavbar")
-<h1>@Model.CourseName</h1>
 
-<h2>Announcements</h2>
+<div class="page-title-with-button m-4">
+	<h2>Announcements</h2>
 
-@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-{
+	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+	{
+		<button>
 	<a asp-controller="Announcements" asp-action="Create" asp-route-id="@Model.Id">Create Announcement</a>
-}
+	</button>
+	}
+</div>
 
 <div class="card-deck">
 	@foreach (var announcement in Model.Announcements)
 	{
-		<div class="card">
-			<div class="card-body">
+		<div class="large-card card">
+			<div class="large-card-heading card-heading">
 				<h5 class="card-title">@announcement.Title</h5>
+
+				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+				{
+					<div class="card-icon">
+						<a class="" href="@Url.Action("Edit", "Announcements", new { id = announcement.Id })">
+							<i class="bi bi-pencil color-white"></i>
+						</a>
+						<a class="" href="@Url.Action("Delete", "Announcements", new { id = announcement.Id })">
+							<i class="bi bi-trash color-white"></i>
+						</a>
+					</div>
+				}
+			</div>
+			<div class="card-body">
 				<p class="card-text">@announcement.Message</p>
 			</div>
 			<div class="card-footer">
-				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-				{
-					<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Announcements", new { id = announcement.Id })">Edit</a>
-					<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Announcements", new { id = announcement.Id })">Delete</a>
-				}
+				
 				<small class="text-muted">@announcement.Date.ToString("g")</small>
 
 			</div>

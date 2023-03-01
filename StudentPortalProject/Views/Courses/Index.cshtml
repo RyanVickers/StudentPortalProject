@@ -4,13 +4,16 @@
 	ViewData["Title"] = "Index";
 }
 
-<h1>Courses</h1>
-@if (User.IsInRole("Admin"))
-{
-	<p>
-		<a asp-action="Create">Create New</a>
-	</p>
-}
+<div class="page-title-with-button">
+	<h1>Courses</h1>
+	@if (User.IsInRole("Admin"))
+	{
+		<button>
+			<a asp-action="Create">Create New</a>
+		</button>
+	}
+</div>
+
 <div class="container">
 	<div class="row row-cols-3 row-cols-md-2 g-4">
 		@foreach (var course in Model)
@@ -18,7 +21,20 @@
 			<div class="col">
 				<a class="link-unstyled" href="@Url.Action("Details", "Courses", new { id = course.Id })">
 					<div class="course-card card clickable">
-						<h5 class="course-name card-title">@course.CourseName</h5>
+						<div class="course-name card-heading">
+							<h5 class="card-title">@course.CourseName</h5>
+							@if (User.IsInRole("Admin"))
+							{
+								<div class="card-icon">
+									<a class="" href="@Url.Action("Edit", "Courses", new { id = course.Id })">
+										<i class="bi bi-pencil color-white"></i>
+									</a>
+									<a class="" href="@Url.Action("Delete", "Courses", new { id = course.Id })">
+										<i class="bi bi-trash color-white"></i>
+									</a>
+								</div>
+							}
+						</div>
 						<div class="card-body">
 							<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
 							<p class="card-text">@course.CourseDescription</p>
@@ -34,7 +50,7 @@
 								}
 							</div>
 						}
-					</div>
+						</div>
 				</a>
 			</div>
 		}

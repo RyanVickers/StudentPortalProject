@@ -4,22 +4,40 @@
 	ViewData["Title"] = "Lectures";
 }
 
+
 @await Html.PartialAsync("_CourseNavbar")
 
-<h1>@Model.CourseName</h1>
-
-<h2>Lectures</h2>
-@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-{
+<div class="page-title-with-button m-4">
+	<h2>Lectures</h2>
+	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+	{
+		<button>
 	<a asp-controller="Lectures" asp-action="Create" asp-route-id="@Model.Id">Create Lecture</a>
-}
-<div class="row">
+	</button>
+	}
+</div>
+<div class="card-deck">
 	@foreach (var lecture in Model.Lectures)
 	{
-		<div class="col-md-12">
-			<div class="card">
+		<div class="large-card card">
+			<div class="large-card-heading card-heading">
+				<h5 class="card-title">@lecture.Title</h5>
+
+				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+				{
+					<div class="card-icon">
+						<a class="" href="@Url.Action("Edit", "Lectures", new { id = lecture.Id })">
+							<i class="bi bi-pencil color-white"></i>
+						</a>
+						<a class="" href="@Url.Action("Delete", "Lectures", new { id = lecture.Id })">
+							<i class="bi bi-trash color-white"></i>
+						</a>
+
+					</div>
+				}
+			</div>
 				<div class="card-body">
-					<h3>@lecture.Title</h3>
+
 					<p>@lecture.Description</p>
 
 					<ul>
@@ -46,14 +64,8 @@
 						}
 					</ul>
 				</div>
-				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-				{
-					<div class="card-footer">
-						<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Lectures", new { id = lecture.Id })">Edit</a>
-						<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Lectures", new { id = lecture.Id })">Delete</a>
-					</div>
-				}
+				
 			</div>
-		</div>
+		
 	}
 </div>

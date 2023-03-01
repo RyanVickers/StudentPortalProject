@@ -4,22 +4,22 @@
 	ViewData["Title"] = "Classlist";
 }
 @await Html.PartialAsync("_CourseNavbar")
-<h1>@Model.CourseName</h1>
 
-<h2>Classlist</h2>
+
+<h2 class="m-4">Classlist</h2>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>Student Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var student in Model.Students)
-        {
-                <tr>
-                    <td>@student.UserName</td>
-                </tr>
-        }
-    </tbody>
+	<thead>
+		<tr>
+			<th>Student Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var student in Model.Students)
+		{
+				<tr>
+					<td>@student.UserName</td>
+				</tr>
+		}
+	</tbody>
 </table>

@@ -1,47 +1,49 @@
 ﻿@model Course
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
-<h1>@Model.CourseName</h1>
+@await Html.PartialAsync("_CourseNavbar")
 
-<p>
-    <a asp-action="Create" asp-route-id="@Model.Id">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Message
-            </th>
-            <th>
-               Date
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Announcements) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+{
+	<div class="justify-content-end">
+	<button class="m-4 float-end">
+		<a asp-controller="Courses" asp-action="Create" asp-route-id="@Model.Id">
+			<i class="bi bi-plus-lg"></i> New Announcement
+		</a>
+	</button>
+	</div>
 }
-    </tbody>
-</table>
+
+<div class="container m-4">
+	@foreach (var item in Model.Announcements)
+	{
+		<div class="large-card card m-2">
+			<div class="large-card-heading card-heading">
+			
+				<h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+					
+			
+				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+				{
+					<div class="card-icon">
+						<a asp-action="Edit" asp-route-id="@item.Id">
+							<i class="bi bi-pencil color-white"></i>
+						</a>
+						<a asp-action="Delete" asp-route-id="@item.Id">
+							<i class="bi bi-trash color-white"></i>
+						</a>
+					</div>
+				}
+				<p class="card-date">@Html.DisplayFor(modelItem => item.Date)</p>
+			</div>
+			<p class="large-card-body">
+				@Html.DisplayFor(modelItem => item.Message)
+			</p>
+
+		</div>
+	}
+</div>
+

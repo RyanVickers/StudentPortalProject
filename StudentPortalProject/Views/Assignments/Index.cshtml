@@ -4,23 +4,28 @@
 	ViewData["Title"] = "Assignments";
 }
 @await Html.PartialAsync("_CourseNavbar")
-<h1>@Model.CourseName</h1>
 
+<div class="page-title-with-button m-4">
 <h2>Assignments</h2>
 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 {
-	<a asp-controller="Assignments" asp-action="Create" asp-route-id="@Model.Id">Create Assignment</a>
+	<button>
+<a asp-controller="Assignments" asp-action="Create" asp-route-id="@Model.Id">Create Assignment</a>
+</button>
 }
-<div class="row">
+</div>
+
+<div class="card-deck">
 	@foreach (var assignment in Model.Assignments)
 	{
-		<a href="@Url.Action("SubmitAssignment", "Assignments", new { id = assignment.Id })">
-			<div class="col-md-12 clickable-card">
-				<div class="card">
+		<a class="link-unstyled" href="@Url.Action("SubmitAssignment", "Assignments", new { id = assignment.Id })">
+			<div class="large-card card clickable-card">
+				<div class="large-card-heading card-heading">
+					<h3 class="card-title">@assignment.Title</h3>
+				</div>
 					<div class="card-body">
-						<h3>@assignment.Title</h3>
-						<p>@assignment.Description</p>
-
+						
+						<p class="card-text">@assignment.Description</p>
 						<ul>
 							@foreach (var file in assignment.AssignmentFiles)
 							{
@@ -44,7 +49,6 @@
 						<a class="btn btn-sm btn-success" href="@Url.Action("Submissions", "Assignments", new { id = assignment.Id })">View Submissions</a>
 					</div>
 
-				</div>
 			</div>
 		</a>
 	}

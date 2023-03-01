@@ -1,11 +1,11 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 :root {
@@ -15,8 +15,8 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -46,26 +46,36 @@ body {
         text-decoration: none;
     }
 
-.navbar-brand h1{
+.navbar-brand h1 {
     color: var(--main-blue);
     display: inline;
 }
 
-    .navbar-brand img {
-        height: 25%;
-        width: 25%;
-        overflow: hidden;
-        margin-top: -6px;
-        padding-right: 5%;
-    }
+.navbar-brand img {
+    height: 25%;
+    width: 25%;
+    overflow: hidden;
+    margin-top: -6px;
+    padding-right: 5%;
+}
 
 body {
     color: var(--dark-blue);
     background: var(--dark-blue);
     background: linear-gradient(0deg, rgba(0,39,73,1) 0%, rgba(0,66,122,1) 100%);
 }
-header, nav{
+
+
+
+/*--------- SHARED STYLES ---------*/
+
+/* -- General Colours & Format -- */
+header, nav {
     background: white;
+}
+
+.color-white {
+    color: white;
 }
 
 .main-content {
@@ -80,12 +90,19 @@ footer {
     background: white;
 }
 
+a:hover {
+    color: black;
+}
+
 .navbar-content {
     text-align: right;
 }
 
-/*--------- HOME - INDEX ---------*/
+.nav-link {
+    color: var(--main-blue)
+}
 
+/* ----- Buttons ----- */
 button {
     border-radius: 5px;
     background: var(--main-blue);
@@ -94,15 +111,119 @@ button {
     height: 40px;
 }
 
-button a {
-    color: white;
-    text-decoration: none;
+    button a {
+        color: white;
+        text-decoration: none;
+    }
+
+
+/* ---- Page Title Area ---- */
+.page-title-with-button {
+    display: grid;
+    grid-template-columns: 7fr 1fr;
+    margin: 0 1.5% 0 0;
+    padding-bottom: 1rem;
 }
+
+    .page-title-with-button button {
+        align-self: center;
+        background: var(--main-blue);
+        border-color: var(--main-blue);
+    }
+    .page-title-with-button h2 {
+        margin-left: 5%;
+    }
+
+.right-button {
+    width: fit-content;
+    float: end;
+}
+
+.page-title-with-back-menu {
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    margin: 0 1.5% 0 0;
+    padding-bottom: 1rem;
+    align-items: center;
+}
+
+    .page-title-with-back-menu h1 {
+        text-align: center;
+    }
+
+    .page-title-with-back-menu a {
+        text-decoration: none;
+        color: black;
+    }
+
+.action-icons {
+    align-content: center;
+    display: flex;
+}
+
+
+/* --- Cards --- */
+
+.card {
+    border-radius: 5px;
+}
+
+.card-heading {
+    background: var(--main-green);
+    color: white;
+    text-align: center;
+    padding: 2%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.card-icon {
+    text-align: center;
+    font-weight: normal;
+    margin: 0 2% 0 2%;
+    grid-column-start: 3;
+    color: white;
+    margin: auto;
+    margin-bottom: 0.5rem;
+}
+
+    .card-icon a {
+        padding: 0 3px 0 3px;
+    }
+
+.large-card {
+    width: 75%;
+    margin: auto;
+    margin-bottom: 2rem;
+}
+
+.large-card-body {
+    padding: 0 2% 0 2%;
+}
+
+.large-card-heading {
+    display: grid;
+    grid-template-columns: 8fr 2fr;
+    align-content: center;
+}
+
+    .large-card-heading .card-title {
+        grid-column-start: 1;
+        text-align: left;
+    }
+
+.card-date {
+    text-align: left;
+    margin: 0;
+}
+
+
+/*--------- HOME - INDEX ---------*/
+
 
 .green-button {
     background: var(--main-green);
     border-color: var(--main-green);
-    
 }
 
 .welcome-content {
@@ -116,18 +237,22 @@ button a {
     color: var(--main-blue);
 }
 
+
+
 /*--------- COURSES LIST ---------*/
-
-.course-card {
-    border-radius: 5px;
-}
-
 .course-name {
-    background: var(--main-green);
-    color: white;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 2fr 6fr 2fr;
 }
+
+    .course-name a {
+        grid-column-start: 2;
+    }
 
 .course-teacher {
     font-weight: bold;
 }
+
+
+
+
