@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,6 +46,7 @@ namespace StudentPortalProject.Controllers
         }
 
         // GET: Assignments/Details/5
+        [Authorize(Roles = "Admin,Teacher")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Assignment == null)
@@ -64,7 +67,8 @@ namespace StudentPortalProject.Controllers
 
         // GET: Assignments/Create
         [HttpGet]
-        public IActionResult Create(int id)
+		[Authorize(Roles = "Admin,Teacher")]
+		public IActionResult Create(int id)
         {
             var course = _context.Course.Include(c => c.Assignments).FirstOrDefault(c => c.Id == id);
 
@@ -83,7 +87,8 @@ namespace StudentPortalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("Title,Description,DueDate")] Assignment assignment, IFormFileCollection files)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Create(int id, [Bind("Title,Description,DueDate")] Assignment assignment, IFormFileCollection files)
         {
             var course = await _context.Course.Include(c => c.Assignments).FirstOrDefaultAsync(c => c.Id == id);
             if (course == null)
@@ -119,8 +124,9 @@ namespace StudentPortalProject.Controllers
             return RedirectToAction(nameof(Index), new { id });
         }
 
-        // GET: Assignments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Assignments/Edit/5
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Assignment == null)
             {
@@ -141,16 +147,24 @@ namespace StudentPortalProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment)
         {
             if (id != assignment.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == assignment.CourseId);
+
+            if (course == null)
             {
-                try
+                return NotFound();
+            }
+
+            assignment.Course = course;
+
+            try
                 {
                     _context.Update(assignment);
                     await _context.SaveChangesAsync();
@@ -166,14 +180,13 @@ namespace StudentPortalProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", assignment.CourseId);
-            return View(assignment);
+            return RedirectToAction(nameof(Index), new { id = assignment.CourseId });
+
         }
 
-        // GET: Assignments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Assignments/Delete/5
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Assignment == null)
             {
@@ -194,7 +207,8 @@ namespace StudentPortalProject.Controllers
         // POST: Assignments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Assignment == null)
             {
@@ -207,8 +221,8 @@ namespace StudentPortalProject.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+			return RedirectToAction(nameof(Index), new { id = assignment.CourseId });
+		}
 
         private bool AssignmentExists(int id)
         {
@@ -347,7 +361,8 @@ namespace StudentPortalProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Grade(int id, int submissionId, int grade)
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Grade(int id, int submissionId, int grade)
         {
             var submission = await _context.AssignmentSubmissions.FindAsync(submissionId);
 
