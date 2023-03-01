@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.ComponentModel;
 
 namespace StudentPortalProject.Models
 {
     public class Course
     {
         public int Id { get; set; }
+        [DisplayName("Course Name")]
         public string CourseName { get; set; }
+        [DisplayName("Course Description")]
         public string CourseDescription { get; set; }
         public string TeacherId { get; set; }
         public ApplicationUser Teacher { get; set; }

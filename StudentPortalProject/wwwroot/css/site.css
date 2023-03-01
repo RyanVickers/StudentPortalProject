@@ -112,7 +112,7 @@ button, .blue-button {
     height: 40px;
 }
 
-    button a {
+    button a, blue-button a, button a:hover, blue-button a:hover {
         color: white;
         text-decoration: none;
     }
