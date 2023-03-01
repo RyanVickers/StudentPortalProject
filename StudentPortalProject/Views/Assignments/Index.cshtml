@@ -15,7 +15,55 @@
 }
 </div>
 
-<div class="card-deck">
+<div class="accordion" id="assignmentAccordion">
+@{int i=0;}
+@foreach (var assignment in Model.Assignments)
+{
+	<div class="accordion-item">
+		<div class="accordion-header" id="heading_@i">
+				<button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@i" aria-expanded="false" aria-control="collapse_@i">
+				<h4>@assignment.Title</h4>
+				<p>@assignment.DueDate</p>
+			</button>
+		</div>
+		<div id="collapse_@i" class="accordion-collapse collapse" aria-labelledby="heading_@i" >
+			<div class="accordion-body">
+				<div id="collapse_@i" class="panel-collapse collapse">
+					<div class="panel-body">
+						<p class="card-text">@assignment.Description</p>
+						<ul>
+							@foreach (var file in assignment.AssignmentFiles)
+							{
+								var AssignmentFile = Url.Action("DownloadFile", "Assignments", new { id = file.Id });
+								<li>
+									<a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="AssignmentFile">@file.FileName</a>
+								</li>
+							}
+						</ul>
+					</div>
+					<div class="container">
+						<div class="row">
+							@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+							{
+								<a class="btn btn-sm btn-primary mr-1 col m-2" href="@Url.Action("Edit", "Assignments", new { id = assignment.Id })">Edit</a>
+								<a class="btn btn-sm btn-danger col m-2" href="@Url.Action("Delete", "Assignments", new { id = assignment.Id })">Delete</a>
+							}
+							@if (User.IsInRole("Student"))
+							{
+								<a class="btn btn-sm btn-primary col m-2" href="@Url.Action("SubmitAssignment", "Assignments", new { id = assignment.Id })">Submit Assignment</a>
+							}
+							<a class="btn btn-sm btn-success col m-2" href="@Url.Action("Submissions", "Assignments", new { id = assignment.Id })">View Submissions</a>
+						</div>
+					</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	i++;
+}
+</div>
+
+@*<div class="card-deck">
 	@foreach (var assignment in Model.Assignments)
 	{
 		<a class="link-unstyled" href="@Url.Action("SubmitAssignment", "Assignments", new { id = assignment.Id })">
@@ -52,4 +100,4 @@
 			</div>
 		</a>
 	}
-</div>
+</div>*@
