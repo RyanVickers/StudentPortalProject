@@ -1,22 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
+@inject SignInManager<ApplicationUser>
+    SignInManager
 
-@{
+    @{
 	ViewData["Title"] = "Home Page";
-}
+    }
 
-<div class="text-center">
-	
-	@if (SignInManager.IsSignedIn(User))
+    <div class="text-center">
+
+        @if (SignInManager.IsSignedIn(User))
 	{
-		<p>This should be the courses soon!</p>
+        <p>Welcome to the Lakehead-Georgian Student Portal!</p>
+        <img class="home-content" src="img/Lakehead_1.png" alt="logo">
+
+
 	}
 	else
 	{
-		<h1 class="display-4">Welcome!</h1>
-		<img class="welcome-content" src="img/LUGC-logo.gif" alt="logo">
-			<button class="welcome-content"><a class="" asp-area="Identity" asp-page="/Account/Login">Login</a></button>
-			<a class="welcome-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
-		
+        <h1 class="display-4">Welcome!</h1>
+        <img class="welcome-content" src="img/LUGC-logo.gif" alt="logo">
+        <button class="welcome-content"><a class="" asp-area="Identity" asp-page="/Account/Login">Login</a></button>
+        <a class="welcome-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+
 		}
-</div>
+    </div>
