@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using StudentPortalProject.Data;
 using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
@@ -37,6 +38,18 @@ namespace StudentPortalProject.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
+		/*
+		 * Returns a list of assignments that correspond to the given course
+		 */
+		public async Task<List<Assignment>> getAssignments(Course course)
+		{
+            var assignments = await _context.Assignment
+                .Where(a => a.CourseId == course.Id)
+                .ToListAsync();
+
+			return assignments;
+        }
+
 		public async Task<IActionResult> Index()
 		{
 			if (!User.Identity.IsAuthenticated)
@@ -48,7 +61,7 @@ namespace StudentPortalProject.Controllers
 				var user = await _userManager.GetUserAsync(User);
 				var role = await _userManager.GetRolesAsync(user);
 				List<Course> courses;
-				List<Assignment> assignmentList = null;
+				List<Assignment> assignmentList = new List<Assignment>();
 				if (role.Contains("Student"))
 				{
 					courses = await _context.Course
@@ -58,9 +71,7 @@ namespace StudentPortalProject.Controllers
 
 					foreach(Course c in courses)
 					{
-						assignmentList = await _context.Assignment
-							.Where(a => a.CourseId == c.Id)
-							.ToListAsync();
+						 assignmentList.AddRange(await getAssignments(c));
 					}
 				}
 				else if (role.Contains("Teacher"))
@@ -69,24 +80,20 @@ namespace StudentPortalProject.Controllers
 						.Where(c => c.TeacherId == user.Id)
 						.ToListAsync();
 
-					foreach (Course c in courses)
-					{
-						assignmentList = await _context.Assignment
-							.Where(a => a.CourseId == c.Id)
-							.ToListAsync();
-					}
-				}
+                    foreach (Course c in courses)
+                    {
+                        assignmentList.AddRange(await getAssignments(c));
+                    }
+                }
 				else if (role.Contains("Admin"))
 				{
 					courses = await _context.Course.ToListAsync();
 
-					foreach (Course c in courses)
-					{
-						assignmentList = await _context.Assignment
-							.Where(a => a.CourseId == c.Id)
-							.ToListAsync();
-					}
-				}
+                    foreach (Course c in courses)
+                    {
+                        assignmentList.AddRange(await getAssignments(c));
+                    }
+                }
 				else
 				{
 					courses = new List<Course>();
