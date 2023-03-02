@@ -124,7 +124,7 @@ namespace StudentPortalProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
             }
-            return View();
+            return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
         }
 
         // GET: Groups/Edit/5
