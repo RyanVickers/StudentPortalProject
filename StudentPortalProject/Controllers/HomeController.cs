@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
+using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 using System.Diagnostics;
 
@@ -47,28 +48,50 @@ namespace StudentPortalProject.Controllers
 				var user = await _userManager.GetUserAsync(User);
 				var role = await _userManager.GetRolesAsync(user);
 				List<Course> courses;
-			if (role.Contains("Student"))
+				List<Assignment> assignmentList = null;
+				if (role.Contains("Student"))
 				{
 					courses = await _context.Course
 						.Include(c => c.Students)
 						.Where(c => c.Students.Any(e => e.Id == user.Id))
 						.ToListAsync();
 
+					foreach(Course c in courses)
+					{
+						assignmentList = await _context.Assignment
+							.Where(a => a.CourseId == c.Id)
+							.ToListAsync();
+					}
 				}
 				else if (role.Contains("Teacher"))
 				{
 					courses = await _context.Course
 						.Where(c => c.TeacherId == user.Id)
 						.ToListAsync();
+
+					foreach (Course c in courses)
+					{
+						assignmentList = await _context.Assignment
+							.Where(a => a.CourseId == c.Id)
+							.ToListAsync();
+					}
 				}
 				else if (role.Contains("Admin"))
 				{
 					courses = await _context.Course.ToListAsync();
+
+					foreach (Course c in courses)
+					{
+						assignmentList = await _context.Assignment
+							.Where(a => a.CourseId == c.Id)
+							.ToListAsync();
+					}
 				}
 				else
 				{
 					courses = new List<Course>();
 				}
+				ViewData["Assignments"] = assignmentList;
 				return View(courses);
 				
 			}
