@@ -71,6 +71,11 @@ body {
 /*--------- SHARED STYLES ---------*/
 
 /* -- General Colours & Format -- */
+.blue-background {
+    margin-top: 2%;
+    margin-bottom: 7%;
+}
+
 header, nav {
     background: white;
 }
@@ -180,7 +185,7 @@ button, .blue-button {
 }
 
 .card-icon {
-    text-align: center;
+    text-align: right;
     font-weight: normal;
     margin: 0 2% 0 2%;
     grid-column-start: 3;
@@ -241,6 +246,33 @@ button, .blue-button {
 
 .welcome-link {
     color: var(--main-blue);
+}
+
+.upcoming-card {
+    display: grid;
+    grid-template-columns: 4fr 2fr 4fr;
+    margin: 1% auto;
+    
+    padding: 1% 1%;
+    align-content: baseline;
+}
+
+.upcoming-date {
+    text-align: end;
+    margin-bottom: 0;
+}
+.upcoming-title {
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.home-div {
+    width: 80%;
+    margin: 10% auto;
+}
+
+.home-title {
+    margin: 2% auto;
 }
 
 

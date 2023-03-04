@@ -5,22 +5,27 @@
 <ul class="collapse navbar-collapse navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+	<li class="nav-item dropdown">
+			<a class="nav-link text-dark " data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="bi bi-person-fill"></i>  @User.Identity?.Name</a>
+		<ul class="dropdown-menu">
+			<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class=""></i>Manage account</a></li>
+			<li><hr class="dropdown-divider"></li>
+			<li class="">
+				<form  class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+					<button  type="submit" class="dropdown-item p-0 text-dark">Logout</button>
+				</form>
+			</li>
+		</ul>
+	</li>
+	
 }
 else
 {
-        <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+		<li class="nav-item">
+			<a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+	</li>
 }
 </ul>

@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
 using StudentPortalProject.Data;
-using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 using System.Diagnostics;
 
 namespace StudentPortalProject.Controllers
 {
 
-    public class HomeController : Controller
-    {
+	public class HomeController : Controller
+	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<ApplicationUser> _userManager;
 
@@ -27,15 +25,15 @@ namespace StudentPortalProject.Controllers
 
 		private readonly ILogger<HomeController> _logger;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+		public IActionResult Privacy()
+		{
+			return View();
+		}
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
 		/*
@@ -43,12 +41,12 @@ namespace StudentPortalProject.Controllers
 		 */
 		public async Task<List<Assignment>> getAssignments(Course course)
 		{
-            var assignments = await _context.Assignment
-                .Where(a => a.CourseId == course.Id)
-                .ToListAsync();
+			var assignments = await _context.Assignment
+				.Where(a => a.CourseId == course.Id)
+				.ToListAsync();
 
 			return assignments;
-        }
+		}
 
 		public async Task<IActionResult> Index()
 		{
@@ -69,9 +67,9 @@ namespace StudentPortalProject.Controllers
 						.Where(c => c.Students.Any(e => e.Id == user.Id))
 						.ToListAsync();
 
-					foreach(Course c in courses)
+					foreach (Course c in courses)
 					{
-						 assignmentList.AddRange(await getAssignments(c));
+						assignmentList.AddRange(await getAssignments(c));
 					}
 				}
 				else if (role.Contains("Teacher"))
@@ -80,27 +78,27 @@ namespace StudentPortalProject.Controllers
 						.Where(c => c.TeacherId == user.Id)
 						.ToListAsync();
 
-                    foreach (Course c in courses)
-                    {
-                        assignmentList.AddRange(await getAssignments(c));
-                    }
-                }
+					foreach (Course c in courses)
+					{
+						assignmentList.AddRange(await getAssignments(c));
+					}
+				}
 				else if (role.Contains("Admin"))
 				{
 					courses = await _context.Course.ToListAsync();
 
-                    foreach (Course c in courses)
-                    {
-                        assignmentList.AddRange(await getAssignments(c));
-                    }
-                }
+					foreach (Course c in courses)
+					{
+						assignmentList.AddRange(await getAssignments(c));
+					}
+				}
 				else
 				{
 					courses = new List<Course>();
 				}
 				ViewData["Assignments"] = assignmentList;
 				return View(courses);
-				
+
 			}
 		}
 	}

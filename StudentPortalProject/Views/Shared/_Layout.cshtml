@@ -26,9 +26,9 @@
 					<ul class="navbar-nav flex-grow-1">
 						@if (User.Identity.IsAuthenticated)
 						{
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+							</li>
 							<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
 							</li>
@@ -52,7 +52,7 @@
 			</div>
 		</nav>
 	</header>
-<div class="container">
+<div class="container blue-background">
 	<div class="main-content">
 		<main role="main" class="">
 			@RenderBody()
