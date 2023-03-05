@@ -4,6 +4,8 @@
 	ViewData["Title"] = "Details";
 }
 
+<div class="main-content">
+
 @await Html.PartialAsync("_CourseNavbar")
 
 <div class="page-title-with-button m-4">
@@ -11,7 +13,7 @@
 
 	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 	{
-		<button>
+		<button class="blue-button">
 	<a asp-controller="Announcements" asp-action="Create" asp-route-id="@Model.Id">Create Announcement</a>
 	</button>
 	}
@@ -27,10 +29,10 @@
 				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 				{
 					<div class="card-icon">
-						<a class="" href="@Url.Action("Edit", "Announcements", new { id = announcement.Id })">
+						<a class="link-unstyled" href="@Url.Action("Edit", "Announcements", new { id = announcement.Id })">
 							<i class="bi bi-pencil color-white"></i>
 						</a>
-						<a class="" href="@Url.Action("Delete", "Announcements", new { id = announcement.Id })">
+						<a class="link-unstyled" href="@Url.Action("Delete", "Announcements", new { id = announcement.Id })">
 							<i class="bi bi-trash color-white"></i>
 						</a>
 					</div>
@@ -46,4 +48,5 @@
 			</div>
 		</div>
 	}
+</div>
 </div>

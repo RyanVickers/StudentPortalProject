@@ -4,12 +4,14 @@
 	ViewData["Title"] = "Index";
 }
 
+<div class="main-content">
+
 @await Html.PartialAsync("_CourseNavbar")
 
 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 {
 	<div class="justify-content-end">
-	<button class="m-4 float-end">
+	<button class="m-4 float-end blue-button">
 		<a asp-controller="Courses" asp-action="Create" asp-route-id="@Model.Id">
 			<i class="bi bi-plus-lg"></i> New Announcement
 		</a>
@@ -46,4 +48,4 @@
 		</div>
 	}
 </div>
-
+</div>

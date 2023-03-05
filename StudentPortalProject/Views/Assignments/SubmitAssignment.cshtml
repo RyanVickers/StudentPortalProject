@@ -4,15 +4,19 @@
     ViewData["Title"] = "Submit Assignment";
 }
 
+<div class="main-content">
+
 <h1>Submit Assignment</h1>
 
 <h2>@Model.Assignment.Title</h2>
 
 <form asp-controller="Assignments" asp-action="SubmitAssignment" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="submissionFiles" class="form-label" >Submission Files</label>
-        <input type="file" class="form-control mb-2" id="submissionFiles" name="submissionFiles" multiple>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <input type="hidden" name="assignmentId" value="@Model.AssignmentId" />
+	<div class="form-group">
+		<label for="submissionFiles" class="form-label" >Submission Files</label>
+		<input type="file" class="form-control mb-2" id="submissionFiles" name="submissionFiles" multiple>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+	<input type="hidden" name="assignmentId" value="@Model.AssignmentId" />
 </form>
+
+</div>

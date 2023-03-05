@@ -3,24 +3,26 @@
 @{
 	ViewData["Title"] = "Assignments";
 }
+<div class="main-content">
+
 @await Html.PartialAsync("_CourseNavbar")
 
 <div class="page-title-with-button m-4">
 <h2>Assignments</h2>
 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 {
-	<button>
+	<button class="blue-button">
 <a asp-controller="Assignments" asp-action="Create" asp-route-id="@Model.Id">Create Assignment</a>
 </button>
 }
 </div>
 
 <div class="accordion" id="assignmentAccordion">
-@{int i=0;}
-@foreach (var assignment in Model.Assignments)
-{
-	<div class="accordion-item">
-		<div class="accordion-header" id="heading_@i">
+	@{int i=0;}
+	@foreach (var assignment in Model.Assignments)
+	{
+		<div class="accordion-item">
+			<div class="accordion-header" id="heading_@i">
 				<button class="accordion-button bg-light collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@i" aria-expanded="false" aria-control="collapse_@i">
 				<h4>@assignment.Title</h4>
 					<p>@assignment.DueDate.ToString("dd/MM/yyyy hh:mm tt")</p>
@@ -61,6 +63,7 @@
 	</div>
 	i++;
 }
+</div>
 </div>
 
 @*<div class="card-deck">

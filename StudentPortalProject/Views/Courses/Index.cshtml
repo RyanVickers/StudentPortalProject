@@ -3,12 +3,12 @@
 @{
 	ViewData["Title"] = "Index";
 }
-
+<div class="main-content">
 <div class="page-title-with-button">
 	<h1>Courses</h1>
 	@if (User.IsInRole("Admin"))
 	{
-		<button>
+		<button class="blue-button">
 			<a asp-action="Create">Create New</a>
 		</button>
 	}
@@ -50,4 +50,5 @@
 			</div>
 		}
 	</div>
+</div>
 </div>

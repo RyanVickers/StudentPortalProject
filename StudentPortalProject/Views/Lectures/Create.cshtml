@@ -1,5 +1,6 @@
 ﻿@model Lecture
 
+<div class="main-content">
 <div class="page-title-with-back-menu">
 	<a asp-controller="Lectures" asp-action="Index" asp-route-id="@Model.CourseId" class="">
 		<i class="bi bi-chevron-left"></i>
@@ -29,3 +30,4 @@
 		<button type="submit" class="">Create</button>
 	</div>
 </form>
+</div>

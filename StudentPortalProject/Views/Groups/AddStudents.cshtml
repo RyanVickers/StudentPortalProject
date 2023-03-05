@@ -4,7 +4,7 @@
     ViewData["Title"] = "Add Students";
     var courseId = ViewBag.CourseId;
 }
-
+<div class="main-content">
 <h1>Edit</h1>
 
 <h4>Group</h4>
@@ -25,7 +25,7 @@
 <div>
     <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@courseId.SelectedValue">Back to List</a>
 </div>
-
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

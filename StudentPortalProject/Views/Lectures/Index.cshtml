@@ -4,14 +4,14 @@
 	ViewData["Title"] = "Lectures";
 }
 
-
+<div class="main-content">
 @await Html.PartialAsync("_CourseNavbar")
 
 <div class="page-title-with-button m-4">
 	<h2>Lectures</h2>
 	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 	{
-		<button>
+		<button class="blue-button">
 	<a asp-controller="Lectures" asp-action="Create" asp-route-id="@Model.Id">Create Lecture</a>
 	</button>
 	}
@@ -26,46 +26,47 @@
 				@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 				{
 					<div class="card-icon">
-						<a class="" href="@Url.Action("Edit", "Lectures", new { id = lecture.Id })">
+						<a class="link-unstyled" href="@Url.Action("Edit", "Lectures", new { id = lecture.Id })">
 							<i class="bi bi-pencil color-white"></i>
 						</a>
-						<a class="" href="@Url.Action("Delete", "Lectures", new { id = lecture.Id })">
+						<a class="link-unstyled" href="@Url.Action("Delete", "Lectures", new { id = lecture.Id })">
 							<i class="bi bi-trash color-white"></i>
 						</a>
 
 					</div>
 				}
 			</div>
-				<div class="card-body">
+			<div class="card-body">
 
-					<p>@lecture.Description</p>
+				<p>@lecture.Description</p>
 
-					<ul>
-						@{
-							string[] validTypes = { ".png", ".jpg", ".jpeg" };
-						}
-						@foreach (var file in lecture.LectureFiles)
+				<ul>
+					@{
+						string[] validTypes = { ".png", ".jpg", ".jpeg" };
+					}
+					@foreach (var file in lecture.LectureFiles)
+					{
+						// DownloadFile is a function AssignmentsController
+						// Lectures is a call to the controller class Lectures
+						var lecFile = Url.Action("DownloadFile", "Lectures", new { id = file.Id });
+						string ext = System.IO.Path.GetExtension(file.FileName);
+						System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + ext);
+
+						// If the file thats been loaded is an image, display it
+						if (validTypes.Contains(ext.ToLower()))
 						{
-							// DownloadFile is a function AssignmentsController
-							// Lectures is a call to the controller class Lectures
-							var lecFile = Url.Action("DownloadFile", "Lectures", new { id = file.Id });
-							string ext = System.IO.Path.GetExtension(file.FileName);
-							System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + ext);
-
-							// If the file thats been loaded is an image, display it
-							if (validTypes.Contains(ext.ToLower()))
-							{
-								<img src="@lecFile" />
-							}
-
-							<li>
-								<a href="@lecFile">@file.FileName</a>
-							</li>
+							<img src="@lecFile" />
 						}
-					</ul>
-				</div>
-				
+
+						<li>
+							<a href="@lecFile">@file.FileName</a>
+						</li>
+					}
+				</ul>
 			</div>
+				
+		</div>
 		
 	}
+</div>
 </div>

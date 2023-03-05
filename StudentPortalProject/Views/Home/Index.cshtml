@@ -7,100 +7,104 @@
 	ViewData["Title"] = "Home Page";
 	}
 
-	<div class="text-center">
+	<div class="row text-center">
 
 	@if (User.Identity.IsAuthenticated)
 	{
-		<h1>Welcome to the Lakehead-Georgian Student Portal!</h1>
-		<img class="home-content" src="img/Lakehead_1.png" alt="logo">
+		<div class="main-content col-8">
+			<h1>Welcome to the Lakehead-Georgian Student Portal!</h1>
+			<img class="home-content" src="img/Lakehead_1.png" alt="logo">
 
-		<div class="home-div">
+			<div class="home-div">
+				<h2 class="home-title">Current Courses</h2>
+				<div class="row row-cols-3 row-cols-md-2 g-4">
+					@foreach (var course in Model)
+					{
+						<div class="col">
+							<a class="link-unstyled" href="@Url.Action("Details", "Courses", new { id = course.Id })">
+								<div class="course-card card clickable">
+									<div class="course-name card-heading">
+										<h5 class="card-title">@course.CourseName</h5>
+										@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+										{
+											<div class="card-icon">
+												<a class="" title="Enroll Students" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">
+													<i class="bi bi-plus-lg color-white"></i>
+												</a>
+												@if (User.IsInRole("Admin"))
+												{
+													<a class="" title="Edit Course" href="@Url.Action("Edit", "Courses", new { id = course.Id })">
+														<i class="bi bi-pencil color-white"></i>
+													</a>
+													<a class="" title="Delete Course" href="@Url.Action("Delete", "Courses", new { id = course.Id })">
+														<i class="bi bi-trash color-white"></i>
+													</a>
+												}
+											</div>
+										}
+									</div>
+									<a class="card-body link-unstyled" href=@Url.Action("Details", "Courses", new { id = course.Id })>
+										<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
+										<p class="card-text">@course.CourseDescription</p>
+									</a>
+									@*@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+									{
+										<div class="card-footer">
+											<a class="btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">Enroll Students</a>
+											@if (User.IsInRole("Admin"))
+											{
+												<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Courses", new { id = course.Id })">Edit</a>
+												<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Courses", new { id = course.Id })">Delete</a>
+											}
+										</div>
+									}*@
+								</div>
+							</a>
+						</div>
+					}
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="main-content col-3">
 			<h2 class="home-title">Upcoming Assignments</h2>
+			@{
+				int days = 0;
+			}
 			@foreach(var assignment in ViewData["Assignments"] as IList<Assignment>)
 			{
+				days = (int)(@assignment.DueDate - DateTime.Today).TotalDays;
 				<a class="link-unstyled" asp-controller="Assignments" asp-action="Index" asp-route-id="@assignment.CourseId">
-				@if ((assignment.DueDate -DateTime.Today).TotalDays < 3)
-				{
-					<div class="card upcoming-card alert-danger clickable" title="View Assignments for @assignment.Course.CourseName">
-						<h5 class="upcoming-title">@assignment.Title</h5>
-						<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
-						<p class="upcoming-date">@assignment.DueDate.ToShortDateString()   @assignment.DueDate.ToShortTimeString()</p>
-					</div>
-				}
-				else if ((assignment.DueDate - DateTime.Today).TotalDays < 8)
-				{
-						<div class="card upcoming-card alert-warning clickable" title="View Assignments for @assignment.Course.CourseName">
-
-						<h5 class="upcoming-title">@assignment.Title</h5>
+					@if (days < 3)
+					{
+						<div class="card alert alert-danger clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
+							<h5 class="upcoming-title text-center">@assignment.Title</h5>
+							<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
 							<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
-						<p class="upcoming-date">@assignment.DueDate.ToShortDateString()   @assignment.DueDate.ToShortTimeString()</p>
-					</div>
-				}
-				else
-				{
-						<div class="card upcoming-card alert-light clickable" title="View Assignments for @assignment.Course.CourseName">
-
-						<h5 class="upcoming-title">@assignment.Title</h5>
+						</div>
+					}
+					else if (days < 8)
+					{
+						<div class="card alert alert-warning clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
+							
+								<h5 class="upcoming-title text-center">@assignment.Title</h5>
+								<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
+								<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
+							</div>
+						
+					}
+					else
+					{
+						<div class="card alert alert-secondary clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
+							<h5 class="upcoming-title text-center">@assignment.Title</h5>
+							<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
 							<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
-						<p class="upcoming-date">@assignment.DueDate.ToShortDateString()   @assignment.DueDate.ToShortTimeString()</p>
-					</div>
-				}
+						</div>
+					}
 				</a>
 			}
 		</div>
-
-
-		<div class="home-div">
-			<h2 class="home-title">Current Courses</h2>
-			<div class="row row-cols-3 row-cols-md-2 g-4">
-				@foreach (var course in Model)
-				{
-					<div class="col">
-						<a class="link-unstyled" href="@Url.Action("Details", "Courses", new { id = course.Id })">
-							<div class="course-card card clickable">
-								<div class="course-name card-heading">
-									<h5 class="card-title">@course.CourseName</h5>
-									@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-									{
-										<div class="card-icon">
-											<a class="" title="Enroll Students" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">
-												<i class="bi bi-plus-lg color-white"></i>
-											</a>
-											@if (User.IsInRole("Admin"))
-											{
-												<a class="" title="Edit Course" href="@Url.Action("Edit", "Courses", new { id = course.Id })">
-													<i class="bi bi-pencil color-white"></i>
-												</a>
-												<a class="" title="Delete Course" href="@Url.Action("Delete", "Courses", new { id = course.Id })">
-													<i class="bi bi-trash color-white"></i>
-												</a>
-											}
-										</div>
-									}
-								</div>
-								<a class="card-body link-unstyled" href=@Url.Action("Details", "Courses", new { id = course.Id })>
-									<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
-									<p class="card-text">@course.CourseDescription</p>
-								</a>
-								@*@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-								{
-									<div class="card-footer">
-										<a class="btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">Enroll Students</a>
-										@if (User.IsInRole("Admin"))
-										{
-											<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Courses", new { id = course.Id })">Edit</a>
-											<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Courses", new { id = course.Id })">Delete</a>
-										}
-									</div>
-								}*@
-							</div>
-						</a>
-					</div>
-				}
-			</div>
-			
-		</div>
-
 
 	}
 	else

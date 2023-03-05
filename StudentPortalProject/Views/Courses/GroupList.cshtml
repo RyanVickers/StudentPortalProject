@@ -3,29 +3,32 @@
 @{
     ViewData["Title"] = "Groups";
 }
+
+<div class="main-content">
 @await Html.PartialAsync("_CourseNavbar")
 
 <h2 class="m-4">Groups</h2>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                Group Name
-                <a class="float-end btn btn-sm btn-primary mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Create</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var group in Model.Groups)
-        {
-            <tr>
-                <td>
-                    @group.GroupName
-                    <a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Delete", "Groups", new{id = group.Id})">Delete</a>
-                    <a class="float-end btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})">Edit Members</a>
-                </td>
-            </tr>
-        }
-    </tbody>
+	<thead>
+	<tr>
+		<th>
+			Group Name
+			<a class="float-end btn btn-sm btn-primary mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Create</a>
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var group in Model.Groups)
+	{
+		<tr>
+			<td>
+				@group.GroupName
+				<a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Delete", "Groups", new{id = group.Id})">Delete</a>
+				<a class="float-end btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})">Edit Members</a>
+			</td>
+		</tr>
+	}
+	</tbody>
 </table>
+</div>

@@ -3,7 +3,7 @@
 @{
 	ViewData["Title"] = "Edit";
 }
-
+<div class="main-content">
 <div class="page-title-with-back-menu">
 	<a asp-controller="Courses" asp-action="Index" class="">
 		<i class="bi bi-chevron-left"></i>
@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-
+</div>
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -84,13 +84,15 @@ header, nav {
     color: white;
 }
 
+
 .main-content {
     background: white;
     border-radius: 10px;
-    margin: auto;
+    margin: 0 2%;
     padding: 5%;
-    width: auto;
+    height: inherit;
 }
+
 
 footer {
     background: white;
@@ -120,6 +122,11 @@ button, .blue-button {
     button a, blue-button a, button a:hover, blue-button a:hover {
         color: white;
         text-decoration: none;
+    }
+    
+    blue-button:hover {
+        background-color: var(--main-green);
+        border-color: var(--main-green);
     }
 
 
@@ -174,6 +181,7 @@ button, .blue-button {
 .card {
     border-radius: 5px;
 }
+
 
 .card-heading {
     background: var(--main-green);
@@ -265,10 +273,7 @@ button, .blue-button {
 }
 
 .upcoming-card {
-    display: grid;
-    grid-template-columns: 4fr 2fr 4fr;
-    margin: 1% auto;
-    
+    margin: 1rem auto;
     padding: 1% 1%;
     align-content: baseline;
 }
@@ -283,12 +288,15 @@ button, .blue-button {
 }
 
 .home-div {
-    width: 80%;
     margin: 10% auto;
 }
 
 .home-title {
     margin: 2% auto;
+}
+
+.home-content {
+    width: 80%;
 }
 
 

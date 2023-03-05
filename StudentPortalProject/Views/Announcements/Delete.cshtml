@@ -4,6 +4,7 @@
 	ViewData["Title"] = "Delete";
 }
 
+<div class="main-content">
 <div class="page-title-with-back-menu">
 	<a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.CourseId" class="">
 		<i class="bi bi-chevron-left"></i>
@@ -30,3 +31,4 @@
 	<input type="hidden" asp-for="Id" />
 	<input type="submit" value="Confirm" class="red-button" />
 </form>
+</div>
