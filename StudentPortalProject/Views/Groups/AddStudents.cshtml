@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Add Students";
     var courseId = ViewBag.CourseId;
+    var groupId = ViewBag.GroupId;
 }
 <div class="main-content">
 <h1>Edit</h1>
@@ -11,7 +12,7 @@
 <hr />
 <div class="row">
     <form asp-action="AddStudents">
-        <input type="hidden" asp-for="CourseId" />
+        <input type="hidden" asp-for="CourseId" value="@groupId"/>
         <div class="form-group">
             <label>Select Students:</label>
             <select asp-for="SelectedStudents" asp-items="ViewBag.Students" multiple class="form-control"></select>

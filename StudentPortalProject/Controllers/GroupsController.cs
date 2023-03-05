@@ -76,6 +76,7 @@ namespace StudentPortalProject.Controllers
         public async Task<IActionResult> AddStudents(int groupId, int courseId)
         {
             ViewData["CourseId"] = courseId;
+            ViewData["GroupId"] = groupId;
             if (groupId == null || _context.Groups == null)
             {
                 return NotFound();
