@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-header">
             <h2>Manage User Roles</h2>
-            Add/Remove Roles for User / @ViewBag.UserName.
+            Edit Roles for User @ViewBag.UserName.
         </div>
         <div class="card-body">
             @for (int i = 0; i < Model.Count; i++)
@@ -26,7 +26,7 @@
         <div class="card-footer">
             <input type="submit" value="Update" class="btn btn-primary"
                    style="width:auto" />
-            <a asp-action="EditUser" asp-route-id="@ViewBag.userId"
+            <a asp-action="Index"
                class="btn btn-primary" style="width:auto">Cancel</a>
         </div>
     </div>

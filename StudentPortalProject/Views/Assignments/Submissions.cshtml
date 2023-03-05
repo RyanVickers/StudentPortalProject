@@ -19,7 +19,7 @@
         @foreach (var submission in Model.AssignmentSubmissions)
         {
             <tr>
-                <td>@submission.Student.FirstName + @submission.Student.LastName</td>
+                <td>@(submission.Student.FirstName + " " + submission.Student.LastName)</td>
                 <td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
                 <td>
                     @foreach (var file in submission.SubmissionFiles)

@@ -222,53 +222,96 @@ namespace StudentPortalProject.Controllers
 		 */
 		[HttpGet]
 		[Authorize(Roles = "Teacher, Admin")]
-		public async Task<IActionResult> AddStudents(int id)
-		{
-			//Gets list of students
-			var students = await _userManager.GetUsersInRoleAsync("student");
-			//Populates multiselect
-			ViewBag.Students = new MultiSelectList(students, "Id", "UserName");
-			return View(new AddStudentsViewModel { CourseId = id });
-		}
+        public async Task<IActionResult> AddStudents(int id)
+        {
+            //Gets list of students
+            var students = await _userManager.GetUsersInRoleAsync("student");
+            //Filter out the students who are already enrolled in the course
+            var enrolledStudentIds = await _context.Enrollments
+                .Where(e => e.CourseId == id)
+                .Select(e => e.StudentId)
+                .ToListAsync();
+            var studentsNotInCourse = students.Where(s => !enrolledStudentIds.Contains(s.Id));
+            //Populates multiselect
+            ViewBag.Students = new MultiSelectList(studentsNotInCourse, "Id", "UserName");
+            return View(new AddStudentsViewModel { CourseId = id });
+        }
 
-		/*
+        /*
 		 * Function to save student to a course
 		 */
-		[HttpPost]
+        [HttpPost]
 		[Authorize(Roles = "Teacher, Admin")]
-		public async Task<IActionResult> AddStudents(AddStudentsViewModel model)
-		{
-			var course = await _context.Course.FindAsync(model.CourseId);
-			if (course == null)
-			{
-				return NotFound();
-			}
-			if (ModelState.IsValid)
-			{
-				//Creates enrollment object with a course and student
-				foreach (var studentId in model.SelectedStudents)
-				{
-					var student = await _context.ApplicationUsers.FindAsync(studentId);
-					if (student != null)
-					{
-						var enrollment = new Enrollment
-						{
-							Course = course,
-							Student = student
-						};
-						_context.Enrollments.Add(enrollment);
-					}
-				}
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View();
-		}
+        public async Task<IActionResult> AddStudents(AddStudentsViewModel model)
+        {
+            var course = await _context.Course.FindAsync(model.CourseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                //Creates enrollment object with a course and student
+                foreach (var studentId in model.SelectedStudents)
+                {
+                    var student = await _context.ApplicationUsers.FindAsync(studentId);
+                    if (student != null)
+                    {
+                        // Check if enrollment already exists
+                        var existingEnrollment = await _context.Enrollments
+                            .FirstOrDefaultAsync(e => e.CourseId == model.CourseId && e.StudentId == studentId);
+                        if (existingEnrollment == null)
+                        {
+                            var enrollment = new Enrollment
+                            {
+                                CourseId = model.CourseId,
+                                StudentId = studentId
+                            };
+                            _context.Enrollments.Add(enrollment);
+                        }
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
 
 		/*
+		 * Function to remove students
+		 */
+        [HttpPost]
+        [Authorize(Roles = "Teacher, Admin")]
+        public async Task<IActionResult> RemoveStudent(int courseId, string studentId)
+        {
+            var course = await _context.Course.FindAsync(courseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Users.FindAsync(studentId);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var enrollment = await _context.Enrollments.FirstOrDefaultAsync(e => e.CourseId == courseId && e.StudentId == studentId);
+            if (enrollment == null)
+            {
+                return NotFound();
+            }
+
+            _context.Enrollments.Remove(enrollment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        /*
 		 * Function to display a list of students in a course
 		 */
-		public async Task<IActionResult> ClassList(int id)
+        public async Task<IActionResult> ClassList(int id)
 		{
 			var course = await _context.Course
 				.Include(c => c.Students)

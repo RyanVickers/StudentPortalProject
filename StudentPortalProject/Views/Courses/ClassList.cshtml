@@ -5,21 +5,38 @@
 }
 @await Html.PartialAsync("_CourseNavbar")
 
-
-<h2 class="m-4">Classlist</h2>
+<div class="page-title-with-button">
+	<h1>Classlist</h1>
+	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+	{
+		<button>
+			<a asp-action="AddStudents">Enroll Students</a>
+		</button>
+	}
+</div>
 
 <table class="table">
 	<thead>
 		<tr>
 			<th>Student Name</th>
+			<th>Student Email</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach (var student in Model.Students)
 		{
-				<tr>
-					<td>@student.UserName</td>
-				</tr>
+			<tr>
+				<td>@(student.FirstName + " " + student.LastName)</td>
+				<td>@student.UserName</td>
+				@if (User.IsInRole("Teacher") || User.IsInRole("Admin")){
+				<td>
+					<form method="post" asp-action="RemoveStudent" asp-route-courseId="@Model.Id" asp-route-studentId="@student.Id">
+						<button type="submit" class="btn btn-sm btn-danger">Remove</button>
+					</form>
+				</td>
+				}
+			</tr>
 		}
 	</tbody>
 </table>

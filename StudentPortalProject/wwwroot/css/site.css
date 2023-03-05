@@ -244,6 +244,22 @@ button, .blue-button {
     margin-bottom: 1%;
 }
 
+.welcome-button {
+    border-radius: 5px;
+    background: var(--main-blue);
+    color: white;
+    width: 200px;
+    height: 40px;
+    display: block;
+    text-align: center;
+    line-height: 40px;
+    text-decoration: none;
+    font-size: 16px;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
+
 .welcome-link {
     color: var(--main-blue);
 }

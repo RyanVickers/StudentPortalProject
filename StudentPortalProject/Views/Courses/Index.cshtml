@@ -23,34 +23,29 @@
 					<div class="course-card card clickable">
 						<div class="course-name card-heading">
 							<h5 class="card-title">@course.CourseName</h5>
-							@if (User.IsInRole("Admin"))
+							@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 							{
 								<div class="card-icon">
-									<a class="" href="@Url.Action("Edit", "Courses", new { id = course.Id })">
-										<i class="bi bi-pencil color-white"></i>
+									<a class="" title="Enroll Students" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">
+										<i class="bi bi-plus-lg color-white"></i>
 									</a>
-									<a class="" href="@Url.Action("Delete", "Courses", new { id = course.Id })">
-										<i class="bi bi-trash color-white"></i>
-									</a>
+									@if (User.IsInRole("Admin"))
+									{
+										<a class="" title="Edit Course" href="@Url.Action("Edit", "Courses", new { id = course.Id })">
+											<i class="bi bi-pencil color-white"></i>
+										</a>
+										<a class="" title="Delete Course" href="@Url.Action("Delete", "Courses", new { id = course.Id })">
+											<i class="bi bi-trash color-white"></i>
+										</a>
+									}
 								</div>
 							}
 						</div>
-						<div class="card-body">
+						<a class="card-body link-unstyled" href=@Url.Action("Details", "Courses", new { id = course.Id })>
 							<p class="course-teacher">@course.Teacher.LastName, @course.Teacher.FirstName</p>
 							<p class="card-text">@course.CourseDescription</p>
-						</div>
-						@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-						{
-							<div class="card-footer">
-								<a class="btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Courses", new { id = course.Id })">Enroll Students</a>
-								@if (User.IsInRole("Admin"))
-								{
-									<a class="btn btn-sm btn-primary mr-1" href="@Url.Action("Edit", "Courses", new { id = course.Id })">Edit</a>
-									<a class="btn btn-sm btn-danger" href="@Url.Action("Delete", "Courses", new { id = course.Id })">Delete</a>
-								}
-							</div>
-						}
-						</div>
+						</a>
+					</div>
 				</a>
 			</div>
 		}
