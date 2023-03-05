@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
+using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 
 namespace StudentPortalProject.Controllers
@@ -128,43 +129,51 @@ namespace StudentPortalProject.Controllers
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Message,CourseId")] Announcement announcement)
-        {
-            if (id != announcement.Id)
-            {
-                return NotFound();
-            }
+		{
+			if (id != announcement.Id)
+			{
+				return NotFound();
+			}
 
-            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == announcement.CourseId);
+			var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == announcement.CourseId);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
+			if (course == null)
+			{
+				return NotFound();
+			}
 
-            announcement.Course = course;
-            announcement.Date = await _context.Announcement.Where(a => a.Id == id).Select(a => a.Date).FirstOrDefaultAsync();
+			announcement.Course = course;
+			announcement.Date = await _context.Announcement.Where(a => a.Id == id).Select(a => a.Date).FirstOrDefaultAsync();
 
-            try
-            {
-                _context.Update(announcement);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AnnouncementExists(announcement.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction("Details", "Courses", new { id = course.Id });
-        }
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_context.Update(announcement);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!AnnouncementExists(announcement.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return RedirectToAction("Details", "Courses", new { id = course.Id });
 
-		// GET: Announcements/Delete/5
-		[Authorize(Roles = "Admin,Teacher")]
+			}
+			else
+			{
+				return View(announcement);
+			}
+		}
+
+			// GET: Announcements/Delete/5
+			[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Delete(int? id)
 		{
 			if (id == null || _context.Announcement == null)

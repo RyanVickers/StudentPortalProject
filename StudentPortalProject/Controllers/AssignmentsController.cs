@@ -155,40 +155,47 @@ namespace StudentPortalProject.Controllers
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment)
-        {
-            if (id != assignment.Id)
-            {
-                return NotFound();
-            }
+		{
+			if (id != assignment.Id)
+			{
+				return NotFound();
+			}
 
-            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == assignment.CourseId);
+			var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == assignment.CourseId);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
+			if (course == null)
+			{
+				return NotFound();
+			}
 
-            assignment.Course = course;
+			assignment.Course = course;
 
-            try
-                {
-                    _context.Update(assignment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AssignmentExists(assignment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            return RedirectToAction(nameof(Index), new { id = assignment.CourseId });
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_context.Update(assignment);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!AssignmentExists(assignment.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
 
-        }
+				return RedirectToAction(nameof(Index), new { id = assignment.CourseId });
+			}
+			else
+			{
+				return View(assignment);
+			}
+		}
 
 		// GET: Assignments/Delete/5
 		[Authorize(Roles = "Admin,Teacher")]

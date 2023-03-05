@@ -151,38 +151,46 @@ namespace StudentPortalProject.Controllers
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CourseId")] Lecture lecture)
-        {
-            if (id != lecture.Id)
-            {
-                return NotFound();
-            }
+		{
+			if (id != lecture.Id)
+			{
+				return NotFound();
+			}
 
-            var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == lecture.CourseId);
+			var course = await _context.Course.FirstOrDefaultAsync(c => c.Id == lecture.CourseId);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
+			if (course == null)
+			{
+				return NotFound();
+			}
 
-            lecture.Course = course;
-            try
-                {
-                    _context.Update(lecture);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LectureExists(lecture.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+			lecture.Course = course;
+
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_context.Update(lecture);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!LectureExists(lecture.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
 				return RedirectToAction(nameof(Index), new { id = lecture.CourseId });
-        }
+			}
+			else
+			{
+				return View(lecture);
+			}
+		}
 
 		// GET: Lectures/Delete/5
 		[Authorize(Roles = "Admin,Teacher")]

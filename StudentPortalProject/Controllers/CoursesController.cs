@@ -156,10 +156,14 @@ namespace StudentPortalProject.Controllers
 			//Populate dropdown with teachers
 			var teachers = await _userManager.GetUsersInRoleAsync("teacher");
 			ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
+
 			if (id != course.Id)
 			{
 				return NotFound();
 			}
+
+			if (ModelState.IsValid)
+			{
 				try
 				{
 					var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
@@ -178,11 +182,17 @@ namespace StudentPortalProject.Controllers
 						throw;
 					}
 				}
+
 				return RedirectToAction(nameof(Index));
+			}
+			else
+			{
+				return View(course);
+			}
 		}
 
-        // GET: Courses/Delete/5
-        [Authorize(Roles = "Admin")]
+		// GET: Courses/Delete/5
+		[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
 		{
 			if (id == null || _context.Course == null)
