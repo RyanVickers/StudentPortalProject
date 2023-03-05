@@ -353,3 +353,7 @@ button, .blue-button {
     text-align: center;
     padding-top: 2%;
 }
+
+.form-floating {
+    padding-bottom: 5px;
+}
