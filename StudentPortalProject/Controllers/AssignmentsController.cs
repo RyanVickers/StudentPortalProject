@@ -139,8 +139,8 @@ namespace StudentPortalProject.Controllers
                 return NotFound();
             }
 
-            var assignment = await _context.Assignment.FindAsync(id);
-            if (assignment == null)
+            var assignment = await _context.Assignment.Include(a => a.AssignmentFiles).FirstOrDefaultAsync(a => a.Id == id);
+			if (assignment == null)
             {
                 return NotFound();
             }
@@ -154,7 +154,7 @@ namespace StudentPortalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment, IFormFileCollection files)
 		{
 			if (id != assignment.Id)
 			{
@@ -174,6 +174,26 @@ namespace StudentPortalProject.Controllers
 			{
 				try
 				{
+					if (files != null && files.Count > 0)
+					{
+						foreach (var file in files)
+						{
+							using (var ms = new MemoryStream())
+							{
+								await file.CopyToAsync(ms);
+								var fileData = ms.ToArray();
+
+								var newFile = new AssignmentFile
+								{
+									FileName = file.FileName,
+									FileData = fileData,
+									Assignment = assignment
+								};
+								assignment.AssignmentFiles.Add(newFile);
+							}
+						}
+					}
+
 					_context.Update(assignment);
 					await _context.SaveChangesAsync();
 				}
@@ -372,7 +392,22 @@ namespace StudentPortalProject.Controllers
             }
         }
 
-        [HttpPost]
+		public async Task<IActionResult> DeleteFile(int id)
+		{
+			var assignmentFile = await _context.AssignmentFiles.FindAsync(id);
+
+			if (assignmentFile == null)
+			{
+				return NotFound();
+			}
+
+			_context.AssignmentFiles.Remove(assignmentFile);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Edit), new { id = assignmentFile.AssignmentId });
+		}
+
+		[HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Grade(int id, int submissionId, int grade)

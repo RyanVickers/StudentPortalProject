@@ -6,47 +6,67 @@
 
 
 <div class="main-content">
-<div class="page-title-with-back-menu">
-	<a asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.CourseId" class="">
-		<i class="bi bi-chevron-left"></i>
-		Cancel
-	</a>
-	<h1 class="">Edit Assignment</h1>
-</div>
-
-<div class="row">
-	<div class="">
-		<form asp-action="Edit">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" asp-for="Id" />
-			<div class="form-group">
-				<label asp-for="Title" class="control-label"></label>
-				<input asp-for="Title" class="form-control" />
-				<span asp-validation-for="Title" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Description" class="control-label"></label>
-				<input asp-for="Description" class="form-control" />
-				<span asp-validation-for="Description" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="DueDate" class="control-label"></label>
-				<input asp-for="DueDate" class="form-control" />
-				<span asp-validation-for="DueDate" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<input type="hidden" asp-for="CourseId" class="form-control" value="@Model.CourseId" />
-				<span asp-validation-for="CourseId" class="text-danger"></span>
-			</div>
-			<div class="form-group text-center m-5">
-				<input type="submit" value="Save" class="blue-button" />
-			</div>
-		</form>
+	<div class="page-title-with-back-menu">
+		<a asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.CourseId" class="">
+			<i class="bi bi-chevron-left"></i>
+			Cancel
+		</a>
+		<h1 class="">Edit Assignment</h1>
 	</div>
-</div>
+
+	<div class="row">
+		<div class="">
+			<form asp-action="Edit" enctype="multipart/form-data">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<input type="hidden" asp-for="Id" />
+				<div class="form-group">
+					<label asp-for="Title" class="control-label"></label>
+					<input asp-for="Title" class="form-control" />
+					<span asp-validation-for="Title" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Description" class="control-label"></label>
+					<input asp-for="Description" class="form-control" />
+					<span asp-validation-for="Description" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="DueDate" class="control-label"></label>
+					<input asp-for="DueDate" class="form-control" />
+					<span asp-validation-for="DueDate" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label for="file" class="form-label">Lecture Files</label>
+					<input type="file" class="form-control" id="file" name="files" multiple>
+				</div>
+				<div class="form-group">
+					<label>Files:</label>
+					<ul>
+						@foreach (var file in Model.AssignmentFiles)
+						{
+							<li>
+								@file.FileName
+								<a class="ml-3" href="@Url.Action("DeleteFile", "Assignments", new { Id = file.Id })">
+									<i class="bi bi-trash"></i>
+								</a>
+							</li>
+						}
+					</ul>
+				</div>
+				<div class="form-group">
+					<input type="hidden" asp-for="CourseId" class="form-control" value="@Model.CourseId" />
+					<span asp-validation-for="CourseId" class="text-danger"></span>
+				</div>
+				<div class="form-group text-center m-5">
+					<input type="submit" value="Save" class="blue-button" />
+				</div>
+			</form>
+		</div>
+	</div>
 
 </div>
 
 @section Scripts {
-	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }
