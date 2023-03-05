@@ -1,20 +1,24 @@
 ﻿@model Course
 
 @{
-    ViewData["Title"] = "Groups";
+	ViewData["Title"] = "Groups";
 }
 
 <div class="main-content">
 @await Html.PartialAsync("_CourseNavbar")
 
-<h2 class="m-4">Groups</h2>
+<div class="page-title-with-button m-4">
+	<h2>Groups</h2>
+	<button class="blue-button">
+			<a href="@Url.Action("Create", "Groups", new{id = Model.Id})"><i class="bi bi-plus-lg color-white"></i> New Group</a>
+		</button>
+</div>
 
 <table class="table">
 	<thead>
 	<tr>
 		<th>
 			Group Name
-			<a class="float-end btn btn-sm btn-primary mr-1" href="@Url.Action("Create", "Groups", new{id = Model.Id})">Create</a>
 		</th>
 	</tr>
 	</thead>
@@ -24,8 +28,8 @@
 		<tr>
 			<td>
 				@group.GroupName
-				<a class="float-end btn btn-sm btn-danger mr-1" href="@Url.Action("Delete", "Groups", new{id = group.Id})">Delete</a>
-				<a class="float-end btn btn-sm btn-success mr-1" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})">Edit Members</a>
+				<a class="float-end btn btn-sm btn-danger mr-1" title="Delete Group" href="@Url.Action("Delete", "Groups", new{id = group.Id})"><i class="bi bi-trash"></i></a>
+				<a class="float-end btn btn-sm btn-success mr-1" title="Edit Group" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})"><i class="bi bi-pencil"></i></a>
 			</td>
 		</tr>
 	}

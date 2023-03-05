@@ -1,36 +1,39 @@
 ﻿@model StudentPortalProject.Models.Course
 
 <div class="page-title-with-back-menu">
-    <a asp-controller="Courses" asp-action="Index" class="">
-        <i class="bi bi-chevron-left"></i>
-        Course List
-    </a>
-    <h1 class="">@Model.CourseName</h1>
-    <div class="action-icons">
-        <a asp-controller="Courses" asp-action="Edit" asp-route-id="@Model?.Id">
-            <i class="bi bi-pencil"></i>
-        </a>
-    </div>
+	<a asp-controller="Courses" asp-action="Index" class="">
+		<i class="bi bi-chevron-left"></i>
+		Course List
+	</a>
+	<h1 class="">@Model.CourseName</h1>
+	<div class="action-icons">
+		@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+		{
+			<a asp-controller="Courses" asp-action="Edit" asp-route-id="@Model?.Id">
+				<i class="bi bi-pencil"></i>
+			</a>
+		}
+	</div>
 </div>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id">Announcements</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Lectures" asp-action="Index" asp-route-id="@Model.Id">Lectures</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.Id">Assignments</a>
-            </li>
-            <li>
-                <a class="nav-link" asp-controller="Courses" asp-action="ClassList" asp-route-id="@Model.Id">Classlist</a>
-            </li>
-            <li>
-                <a class="nav-link" asp-controller="Courses" asp-action="GroupList" asp-route-id="@Model.Id">Groups</a>
-            </li>
-        </ul>
-    </div>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id">Announcements</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-controller="Lectures" asp-action="Index" asp-route-id="@Model.Id">Lectures</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.Id">Assignments</a>
+			</li>
+			<li>
+				<a class="nav-link" asp-controller="Courses" asp-action="ClassList" asp-route-id="@Model.Id">Classlist</a>
+			</li>
+			<li>
+				<a class="nav-link" asp-controller="Courses" asp-action="GroupList" asp-route-id="@Model.Id">Groups</a>
+			</li>
+		</ul>
+	</div>
 </nav>
