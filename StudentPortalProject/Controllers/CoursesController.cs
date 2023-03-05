@@ -96,25 +96,33 @@ namespace StudentPortalProject.Controllers
 			//Populate dropdown with teachers
 			var teachers = await _userManager.GetUsersInRoleAsync("teacher");
 			ViewBag.Teachers = new SelectList(teachers, "Id", "UserName");
-			//Save teacher and course
-			var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
-			course.Teacher = teacher;
-			_context.Add(course);
-			await _context.SaveChangesAsync();
 
-            // Create default announcement for the course
-            var announcement = new Announcement
-            {
-                Title = "Welcome to " + course.CourseName + "!",
-                Message = "This is the default announcement for the " + course.CourseName + " course.",
-                Date = DateTime.Now,
-                Course = course
-            };
+			if (ModelState.IsValid)
+			{
+				//Save teacher and course
+				var teacher = await _userManager.FindByIdAsync(course.Teacher.Id);
+				course.Teacher = teacher;
+				_context.Add(course);
+				await _context.SaveChangesAsync();
 
-            _context.Add(announcement);
-            await _context.SaveChangesAsync();
+				// Create default announcement for the course
+				var announcement = new Announcement
+				{
+					Title = "Welcome to " + course.CourseName + "!",
+					Message = "This is the default announcement for the " + course.CourseName + " course.",
+					Date = DateTime.Now,
+					Course = course
+				};
 
-            return RedirectToAction(nameof(Index));
+				_context.Add(announcement);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(Index));
+			}
+			else
+			{
+				return View(course);
+			}
 		}
 
 		// GET: Courses/Edit/5

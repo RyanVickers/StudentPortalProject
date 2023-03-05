@@ -81,43 +81,50 @@ namespace StudentPortalProject.Controllers
 		 * Function to create lectures
 		 */
         [HttpPost]
+		[ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Create(int id, [Bind("Title,Description")] Lecture lecture, IFormFileCollection files)
-        {
-            var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
+		{
+			var course = _context.Course.Include(c => c.Lectures).FirstOrDefault(c => c.Id == id);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
+			if (course == null)
+			{
+				return NotFound();
+			}
 
-            if (files != null && files.Count > 0)
-            {
-                foreach (var file in files)
-                {
+			if (ModelState.IsValid)
+			{
+				if (files != null && files.Count > 0)
+				{
+					foreach (var file in files)
+					{
+						using (var ms = new MemoryStream())
+						{
+							await file.CopyToAsync(ms);
+							var fileData = ms.ToArray();
 
-                    using (var ms = new MemoryStream())
-                    {
-                        await file.CopyToAsync(ms);
-                        var fileData = ms.ToArray();
+							var newFile = new LectureFile
+							{
+								FileName = file.FileName,
+								FileData = fileData,
+								Lecture = lecture,
+							};
+							lecture.LectureFiles.Add(newFile);
+						}
+					}
+				}
 
-                        var newFile = new LectureFile
-                        {
-                            FileName = file.FileName,
-                            FileData = fileData,
-                            Lecture = lecture,
-                        };
-                        lecture.LectureFiles.Add(newFile);
-                    }
-                }
-            }
+				lecture.Course = course;
+				_context.Lectures.Add(lecture);
+				await _context.SaveChangesAsync();
 
-            lecture.Course = course;
-            _context.Lectures.Add(lecture);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index), new { id });
-        }
+				return RedirectToAction(nameof(Index), new { id });
+			}
+			else
+			{
+				return View(lecture);
+			}
+		}
 
 		// GET: Lectures/Edit/5
 		[Authorize(Roles = "Admin,Teacher")]

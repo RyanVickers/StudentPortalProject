@@ -88,12 +88,19 @@ namespace StudentPortalProject.Controllers
 			{
 				return NotFound();
 			}
-			announcement.Course = course;
-			announcement.Date = DateTime.Now;
-			_context.Add(announcement);
-			await _context.SaveChangesAsync();
 
-			return RedirectToAction("Details", "Courses", new { id });
+			if (ModelState.IsValid)
+			{
+				announcement.Course = course;
+				announcement.Date = DateTime.Now;
+				_context.Add(announcement);
+				await _context.SaveChangesAsync();
+				return RedirectToAction("Details", "Courses", new { id });
+			}
+			else
+			{
+				return View(announcement);
+			}
 		}
 
 		// GET: Announcements/Edit/5

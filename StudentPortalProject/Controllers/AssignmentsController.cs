@@ -89,40 +89,46 @@ namespace StudentPortalProject.Controllers
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
 		public async Task<IActionResult> Create(int id, [Bind("Title,Description,DueDate")] Assignment assignment, IFormFileCollection files)
-        {
-            var course = await _context.Course.Include(c => c.Assignments).FirstOrDefaultAsync(c => c.Id == id);
-            if (course == null)
-            {
-                return NotFound();
-            }
+		{
+			var course = await _context.Course.Include(c => c.Assignments).FirstOrDefaultAsync(c => c.Id == id);
+			if (course == null)
+			{
+				return NotFound();
+			}
 
-            if (files != null && files.Count > 0)
-            {
-                foreach (var file in files)
-                {
+			if (ModelState.IsValid)
+			{
+				if (files != null && files.Count > 0)
+				{
+					foreach (var file in files)
+					{
+						using (var ms = new MemoryStream())
+						{
+							await file.CopyToAsync(ms);
+							var fileData = ms.ToArray();
 
-                    using (var ms = new MemoryStream())
-                    {
-                        await file.CopyToAsync(ms);
-                        var fileData = ms.ToArray();
+							var newFile = new AssignmentFile
+							{
+								FileName = file.FileName,
+								FileData = fileData,
+								Assignment = assignment,
+							};
+							assignment.AssignmentFiles.Add(newFile);
+						}
+					}
+				}
 
-                        var newFile = new AssignmentFile
-                        {
-                            FileName = file.FileName,
-                            FileData = fileData,
-                            Assignment = assignment,
-                        };
-                        assignment.AssignmentFiles.Add(newFile);
-                    }
-                }
-            }
+				assignment.Course = course;
+				_context.Assignments.Add(assignment);
+				await _context.SaveChangesAsync();
 
-            assignment.Course = course;
-            _context.Assignments.Add(assignment);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index), new { id });
-        }
+				return RedirectToAction(nameof(Index), new { id });
+			}
+			else
+			{
+				return View(assignment);
+			}
+		}
 
 		// GET: Assignments/Edit/5
 		[Authorize(Roles = "Admin,Teacher")]
