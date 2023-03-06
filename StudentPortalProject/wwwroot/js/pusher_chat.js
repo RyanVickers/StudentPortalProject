@@ -19,7 +19,7 @@ $("#groups").on("click", ".group", function () {
     let group_id = $(this).attr("data-group_id");
 
     $('.group').css({ "border-style": "none", cursor: "pointer" });
-    $(this).css({ "border-style": "inset", cursor: "default" });
+    $(this).css({ "border-style": "inset", cursor: "default" , "border-color": "var(--light-green)"});
 
     $("#currentGroup").val(group_id); // update the current group_id to html file...
     currentGroupId = group_id;

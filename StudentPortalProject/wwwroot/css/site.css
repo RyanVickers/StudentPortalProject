@@ -13,6 +13,8 @@ html {
     --main-green: #51830e;
     --dark-blue: #002749;
     --new-red: #c51d22;
+    --light-green: rgb(88, 173, 64);
+    --main-yellow: rgb(255, 193, 19);
 }
 
 html {
@@ -356,4 +358,83 @@ button, .blue-button {
 
 .form-floating {
     padding-bottom: 5px;
+}
+
+.group {
+    padding: 13px;
+    border-radius: 12px;
+    background: rgb(255, 193, 19);
+    margin: 5px 10px;
+    font-weight: bolder;
+    color: var(--main-blue);
+    cursor: pointer;
+}
+
+.group:target{
+    background: var(--dark-blue);
+}
+
+.chat_body {
+    height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: var(--light-green);
+}
+
+.less_padding {
+    padding: 2px;
+}
+
+.chat_message {
+    padding: 13px;
+    border-radius: 12px;
+    width: 50%;
+    background: #85C1E9;
+    margin: 6px 4px;
+}
+
+.chat_main {
+    
+    height: 520;
+    padding: 0px;
+}
+
+.group_main {
+    background-color: var(--new-red);
+}
+
+.text_box {
+    background-color: var(--new-red);
+    margin-left: 0px;
+}
+
+.msg {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.msg_btn {
+    color: white;
+    background-color: var(--main-blue);
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.msg_btn:hover {
+    background-color: var(--main-yellow);
+    color: var(--new-red);
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
