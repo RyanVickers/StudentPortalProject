@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
 using StudentPortalProject.Models;
+using System.Data;
 
 namespace StudentPortalProject.Controllers
 {
@@ -20,7 +18,7 @@ namespace StudentPortalProject.Controllers
             _context = context;
         }
 
-        /*
+		/*
         // GET: Groups
         public async Task<IActionResult> Index()
         {
@@ -49,18 +47,20 @@ namespace StudentPortalProject.Controllers
         }
         */
 
-        // GET: Groups/Create
-        public IActionResult Create(int id)
+		// GET: Groups/Create
+		[Authorize(Roles = "Admin,Teacher")]
+		public IActionResult Create(int id)
         {
             ViewData["Courses"] = new SelectList(_context.Course, "Id", "Id");
             ViewBag.CourseId = id;
             return View();
         }
 
-        // POST: Groups/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		// POST: Groups/Create
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[Authorize(Roles = "Admin,Teacher")]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GroupName,CourseId")] Group @group)
         {
@@ -71,8 +71,9 @@ namespace StudentPortalProject.Controllers
             return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
         }
 
-        // GET: Add students to the group
-        [HttpGet]
+		// GET: Add students to the group
+		[Authorize(Roles = "Admin,Teacher")]
+		[HttpGet]
         public async Task<IActionResult> AddStudents(int groupId, int courseId)
         {
             ViewData["CourseId"] = courseId;
@@ -97,8 +98,9 @@ namespace StudentPortalProject.Controllers
             return View(new AddStudentsViewModel { CourseId = groupId });
         }
 
-        // POST: Add students to the group
-        [HttpPost]
+		// POST: Add students to the group
+		[Authorize(Roles = "Admin,Teacher")]
+		[HttpPost]
         public async Task<IActionResult> AddStudents(AddStudentsViewModel model)
         {
             var group = await _context.Groups.FindAsync(model.CourseId);
@@ -129,6 +131,7 @@ namespace StudentPortalProject.Controllers
         }
 
         // GET: Groups/Edit/5
+        /*
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Groups == null)
@@ -180,10 +183,12 @@ namespace StudentPortalProject.Controllers
             ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @group.CourseId);
 			return RedirectToAction("GroupList", "Courses", new { id = group.CourseId });
 		}
+        */
 
-        
-        // GET: Groups/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+		// GET: Groups/Delete/5
+		[Authorize(Roles = "Admin,Teacher")]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Groups == null)
             {
@@ -200,8 +205,9 @@ namespace StudentPortalProject.Controllers
             return View(@group);
         }
 
-        // POST: Groups/Delete/5
-        [HttpPost, ActionName("Delete")]
+		// POST: Groups/Delete/5
+		[Authorize(Roles = "Admin,Teacher")]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

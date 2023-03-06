@@ -40,7 +40,8 @@ namespace StudentPortalProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] NewGroupViewModel group)
+		[Authorize(Roles = "Admin,Teacher")]
+		public IActionResult Create([FromBody] NewGroupViewModel group)
         {
             if (group == null || group.GroupName == "")
             {

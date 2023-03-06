@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
 using StudentPortalProject.Models;
-using StudentPortalProject.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,8 +61,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
-// SignalR -- chat services
-app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
