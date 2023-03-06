@@ -93,7 +93,23 @@ namespace StudentPortalProject.Controllers
             var students = await _context.Course
                 .Include(c => c.Students)
                 .FirstOrDefaultAsync(c => c.Id == group.CourseId);
-            ViewBag.Students = new MultiSelectList(students.Students, "Id", "UserName");
+            var groupMembers = await _context.GroupMembers
+                .Where(c => c.GroupId == groupId)
+                .Select(c => new GroupMember
+                {
+                    Student = c.Student,
+                })
+                .ToListAsync();
+
+            foreach(var stu in groupMembers)
+            {
+                if(students.Students.Contains(stu.Student))
+                {
+                    students.Students.Remove(stu.Student);
+                }
+            }
+
+			ViewBag.Students = new MultiSelectList(students.Students, "Id", "UserName");
 
             return View(new AddStudentsViewModel { CourseId = groupId });
         }
