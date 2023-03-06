@@ -9,9 +9,12 @@
 
 <div class="page-title-with-button m-4">
 	<h2>Groups</h2>
-	<button class="blue-button">
-			<a href="@Url.Action("Create", "Groups", new{id = Model.Id})"><i class="bi bi-plus-lg color-white"></i> New Group</a>
-		</button>
+		@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+		{
+			<button class="blue-button">
+				<a href="@Url.Action("Create", "Groups", new{id = Model.Id})"><i class="bi bi-plus-lg color-white"></i> New Group</a>
+			</button>
+		}
 </div>
 
 <table class="table">
