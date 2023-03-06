@@ -89,7 +89,7 @@ header, nav {
     background: white;
     border-radius: 10px;
     margin: 0 2%;
-    padding: 5%;
+    padding: 2%;
     height: inherit;
 }
 
@@ -129,6 +129,17 @@ button, .blue-button {
         border-color: var(--main-green);
     }
 
+.dark-blue-button {
+    background: var(--dark-blue);
+    width: 170px;
+    border-color: var(--dark-blue);
+}
+
+.green-button {
+    background: var(--main-green);
+    border-color: var(--main-green);
+    width: 200px;
+}
 
 /* ---- Page Title Area ---- */
 .page-title-with-button {
@@ -227,6 +238,10 @@ button, .blue-button {
         text-align: left;
     }
 
+.card-title {
+    grid-column-start: 2;
+}
+
 .card-date {
     text-align: left;
     margin: 0;
@@ -250,6 +265,12 @@ button, .blue-button {
     
     margin-top: 5%;
     margin-bottom: 1%;
+}
+
+.login-content {
+    width: 80%;
+    height: 80%;
+    margin: 2% auto;
 }
 
 .welcome-button {
@@ -304,7 +325,7 @@ button, .blue-button {
 /*--------- COURSES LIST ---------*/
 .course-name {
     display: grid;
-    grid-template-columns: 2fr 6fr 2fr;
+    grid-template-columns: 2fr 4fr 2fr;
 }
 
     .course-name a {
