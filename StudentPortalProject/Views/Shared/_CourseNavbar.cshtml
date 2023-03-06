@@ -28,6 +28,12 @@
 			<li class="nav-item">
 				<a class="nav-link" asp-controller="Assignments" asp-action="Index" asp-route-id="@Model.Id">Assignments</a>
 			</li>
+			@if (User.IsInRole("Student"))
+			{
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Courses" asp-action="Grades" asp-route-id="@Model.Id">Grades</a>
+				</li>
+			}
 			<li>
 				<a class="nav-link" asp-controller="Courses" asp-action="ClassList" asp-route-id="@Model.Id">Classlist</a>
 			</li>

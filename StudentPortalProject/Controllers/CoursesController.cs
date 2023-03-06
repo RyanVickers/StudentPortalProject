@@ -355,5 +355,44 @@ namespace StudentPortalProject.Controllers
 			}
 			return View(groups);
 		}
-    }
+
+		public async Task<IActionResult> Grades(int id)
+		{
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Get the course by id
+			var course = await _context.Course
+				.Include(c => c.Students)
+				.FirstOrDefaultAsync(c => c.Id == id);
+
+			if (course == null)
+			{
+				return NotFound();
+			}
+
+			// Check if the current user is a student of the course
+			if (!course.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
+			}
+
+			// Get all assignments for the course
+			var assignments = await _context.Assignment
+				.Where(a => a.CourseId == id)
+				.Select(a => new GradesViewModel
+				{
+					AssignmentId = a.Id,
+					AssignmentName = a.Title,
+					CourseId = id,
+					Course = course,
+					Grade = a.AssignmentSubmissions
+						.Where(s => s.StudentId == user.Id)
+						.Max(s => s.Grade)
+				})
+				.ToListAsync();
+
+			return View(assignments);
+		}
+	}
 }

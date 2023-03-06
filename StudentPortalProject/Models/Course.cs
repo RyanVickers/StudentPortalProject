@@ -20,5 +20,5 @@ namespace StudentPortalProject.Models
         public virtual ICollection<Lecture> ?Lectures { get; set; }
         public virtual ICollection<Assignment> ?Assignments { get; set; }
 
-    }
+	}
 }
