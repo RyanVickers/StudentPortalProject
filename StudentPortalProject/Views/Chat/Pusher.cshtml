@@ -1,80 +1,11 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿
 @{
-	Layout = null;
 	@using Microsoft.AspNetCore.Identity
 	@using StudentPortalProject.Models
 
 	@inject UserManager<ApplicationUser> UserManager
 }
-<!doctype html>
-<html lang="en">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<!-- Bootstrap CSS -->
-	<link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<title>Group Chat - LUGC Portal</title>
-	<style type="text/css">
-		.group {
-			padding: 5%;
-			border-radius: 5px;
-			background: var(--dark-blue);
-			margin: 5px 0px;
-			font-weight: bolder;
-			color: white;
-			cursor: pointer;
-		}
-
-		.chat_body {
-			height: 520px;
-			overflow: scroll;
-		}
-
-		.less_padding {
-			padding: 2px;
-		}
-
-		.chat_message {
-			padding: 13px;
-			border-radius: 5px;
-			width: 50%;
-			background: #85C1E9;
-			margin: 6px 4px;
-		}
-
-		.chat_main {
-			/*background-color: #957bbe;*/
-			height: 95%;
-			padding: 0px;
-			border-radius: 5px;
-		}
-
-		.group_main {
-			/*background: rgb(57, 125, 192);*/
-			border-radius: 5px;
-			padding-left: 0.5rem;
-		}
-	</style>
-</head>
-<body>
-<header>
-	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-		<div class="container-fluid">
-			<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-				<img src="~/img/LUGC-logo.gif" alt="Logo">
-				<h1>LUGC Portal</h1>
-			</a>
-			<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-				<partial name="_LoginPartial" />
-			</div>
-		</div>
-	</nav>
-</header>
+<title>Group Chat - LUGC Portal</title>
 <div class="container blue-background">
 	<div class="main-content">
 		<div class="page-title-with-back-menu">
@@ -90,7 +21,7 @@
 				<div class="col">
 					<div class="group_main">
 						<div class="text-center"> Groups </div>
-						<div clsss="row" style="height: 500px;overflow: scroll;" id="groups">
+							<div clsss="row" style="height: 500px;overflow-y: scroll;overflow-x: hidden" id="groups">
 							<input type="hidden" value="" id="currentGroup">
 							<!-- List groups-->
 							@foreach (var group in (dynamic)ViewBag.GroupMembers)
@@ -169,12 +100,10 @@
 		</div>
 	</div>
 </div>
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-	<script src="https://js.pusher.com/4.1/pusher.min.js"></script>
-	<script src="~/js/pusher_chat.js" asp-append-version="true"></script>
-</body>
-</html>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+<script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+<script src="~/js/pusher_chat.js" asp-append-version="true"></script>
