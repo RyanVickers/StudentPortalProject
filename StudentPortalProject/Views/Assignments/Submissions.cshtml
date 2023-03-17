@@ -1,4 +1,4 @@
-﻿@model Assignment
+﻿@model List<AssignmentSubmission>
 
 @{
     ViewData["Title"] = "Submissions";
@@ -6,47 +6,47 @@
 
 <div class="main-content">
 
-<h1>@Model.Title Submissions</h1>
+    <h2>@Model.FirstOrDefault()?.Assignment.Title</h2>
 
-<table class="table">
-	<thead>
-	<tr>
-		<th>Student</th>
-		<th>Submission Date</th>
-		<th>Files</th>
-		<th>Grade</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach (var submission in Model.AssignmentSubmissions)
-	{
-		<tr>
-			<td>@(submission.Student.FirstName + " " + submission.Student.LastName)</td>
-			<td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
-			<td>
-				@foreach (var file in submission.SubmissionFiles)
-				{
-					<a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="SubmissionFile">@file.FileName</a>
-					<br />
-				}
-			</td>
-					@if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
-			{
-				<td>
-					<form asp-action="Grade" asp-controller="Assignments" method="post">
-						<input type="hidden" name="submissionId" value="@submission.Id" />
-						<input type="number" name="grade" step="0.1" value="@submission.Grade" />
-						<button type="submit">Submit</button>
-					</form>
-				</td>
-			}
-			else
-			{
-				<td>@submission.Grade</td>
-			}
-		</tr>
-	}
-	</tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Submission Date</th>
+                <th>Files</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var submission in Model)
+            {
+                <tr>
+                    <td>@(submission.Student.FirstName + " " + submission.Student.LastName)</td>
+                    <td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>
+                        @foreach (var file in submission.SubmissionFiles)
+                        {
+                            <a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="SubmissionFile">@file.FileName</a>
+                            <br />
+                        }
+                    </td>
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <form asp-action="Grade" asp-controller="Assignments" method="post">
+                                <input type="hidden" name="submissionId" value="@submission.Id" />
+                                <input type="number" name="grade" step="0.1" value="@submission.Grade" />
+                                <button type="submit">Submit</button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@submission.Grade</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 
 </div>

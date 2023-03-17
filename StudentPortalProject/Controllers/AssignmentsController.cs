@@ -344,27 +344,50 @@ namespace StudentPortalProject.Controllers
         /*
          * Function to display Submissions
          */
-        public async Task<IActionResult> Submissions(int id)
-        {
-            var assignment = await _context.Assignments
-        .Include(a => a.AssignmentSubmissions)
-            .ThenInclude(s => s.Student)
-        .Include(a => a.AssignmentSubmissions)
-            .ThenInclude(s => s.SubmissionFiles)
-        .FirstOrDefaultAsync(a => a.Id == id);
+        [Authorize]
+		public async Task<IActionResult> Submissions(int id)
+		{
+			var assignment = await _context.Assignments
+				.Include(a => a.AssignmentSubmissions)
+					.ThenInclude(s => s.Student)
+				.Include(a => a.AssignmentSubmissions)
+					.ThenInclude(s => s.SubmissionFiles)
+				.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (assignment == null)
-            {
-                return NotFound();
-            }
+			var student = await _userManager.GetUserAsync(User);
 
-            return View(assignment);
-        }
+			if (assignment == null)
+			{
+				return NotFound();
+			}
 
-        /*
+			if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+			{
+				// Show all submissions
+				var submissions = assignment.AssignmentSubmissions.ToList();
+				return View(submissions);
+			}
+			else if (User.IsInRole("Student"))
+			{
+				var submissions = await _context.AssignmentSubmissions
+					.Include(s => s.Student)
+					.Include(s => s.SubmissionFiles)
+					.Where(s => s.Assignment.Id == id && s.Student.Id == student.Id)
+					.ToListAsync();
+
+				return View(submissions);
+			}
+			else
+			{
+				// The user is not a student or a teacher
+				return Forbid();
+			}
+		}
+
+		/*
          * Function to download assignment files
          */
-        public async Task<IActionResult> DownloadFile(int id, string fileType)
+		public async Task<IActionResult> DownloadFile(int id, string fileType)
         {
             if (fileType == "SubmissionFile")
             {
