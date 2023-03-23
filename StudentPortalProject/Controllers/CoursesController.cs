@@ -365,8 +365,9 @@ namespace StudentPortalProject.Controllers
 			var course = await _context.Course
 				.Include(c => c.Students)
 				.FirstOrDefaultAsync(c => c.Id == id);
+            ViewBag.Course = course;
 
-			if (course == null)
+            if (course == null)
 			{
 				return NotFound();
 			}
@@ -377,20 +378,36 @@ namespace StudentPortalProject.Controllers
 				return Forbid();
 			}
 
-			// Get all assignments for the course
-			var assignments = await _context.Assignment
-				.Where(a => a.CourseId == id)
-				.Select(a => new GradesViewModel
-				{
-					AssignmentId = a.Id,
-					AssignmentName = a.Title,
-					CourseId = id,
-					Course = course,
-					Grade = a.AssignmentSubmissions
-						.Where(s => s.StudentId == user.Id)
-						.Max(s => s.Grade)
-				})
-				.ToListAsync();
+            // Get all assignments for the course that the user has submitted a grade for
+            var assignments = await _context.Assignment
+                .Where(a => a.CourseId == id && a.AssignmentSubmissions.Any(s => s.StudentId == user.Id && s.Grade != null))
+                .Select(a => new GradesViewModel
+                {
+                    AssignmentId = a.Id,
+                    AssignmentName = a.Title,
+                    CourseId = id,
+                    Course = course,
+                    Weight = a.Weight,
+                    Grade = a.AssignmentSubmissions
+                        .Where(s => s.StudentId == user.Id)
+                        .Max(s => s.Grade)
+                })
+                .ToListAsync();
+
+            // Get the total weight of all assignments
+            decimal totalWeight = assignments.Sum(a => a.Weight);
+
+			// Calculate the sum of the weighted grades
+			decimal weightedGradeSum = assignments
+				.Where(a => a.Grade.HasValue)
+				.Sum(a => a.Weight * a.Grade.Value);
+
+			// Calculate the overall grade average
+			decimal overallGrade = totalWeight > 0
+				? weightedGradeSum / totalWeight
+				: 0;
+
+			ViewBag.OverallGrade = overallGrade.ToString("F2");
 
 			return View(assignments);
 		}

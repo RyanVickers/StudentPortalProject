@@ -88,7 +88,7 @@ namespace StudentPortalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
-		public async Task<IActionResult> Create(int id, [Bind("Title,Description,DueDate")] Assignment assignment, IFormFileCollection files)
+		public async Task<IActionResult> Create(int id, [Bind("Title,Description,DueDate,Weight")] Assignment assignment, IFormFileCollection files)
 		{
 			var course = await _context.Course.Include(c => c.Assignments).FirstOrDefaultAsync(c => c.Id == id);
 			if (course == null)
@@ -154,7 +154,7 @@ namespace StudentPortalProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,CourseId")] Assignment assignment, IFormFileCollection files)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DueDate,Weight,CourseId")] Assignment assignment, IFormFileCollection files)
 		{
 			if (id != assignment.Id)
 			{
@@ -304,6 +304,7 @@ namespace StudentPortalProject.Controllers
                 StudentId = student.Id,
                 Student = student,
                 SubmissionDate = DateTime.Now,
+                Grade = null,
                 SubmissionFiles = new List<SubmissionFile>()
             };
 
@@ -345,49 +346,57 @@ namespace StudentPortalProject.Controllers
          * Function to display Submissions
          */
         [Authorize]
-		public async Task<IActionResult> Submissions(int id)
-		{
-			var assignment = await _context.Assignments
-				.Include(a => a.AssignmentSubmissions)
-					.ThenInclude(s => s.Student)
-				.Include(a => a.AssignmentSubmissions)
-					.ThenInclude(s => s.SubmissionFiles)
-				.FirstOrDefaultAsync(a => a.Id == id);
+        public async Task<IActionResult> Submissions(int id)
+        {
+            var assignment = await _context.Assignments
+                .Include(a => a.AssignmentSubmissions)
+                    .ThenInclude(s => s.Student)
+                .Include(a => a.AssignmentSubmissions)
+                    .ThenInclude(s => s.SubmissionFiles)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-			var student = await _userManager.GetUserAsync(User);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
 
-			if (assignment == null)
-			{
-				return NotFound();
-			}
+            if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+            {
+                ViewBag.CourseId = assignment.CourseId;
+                // Show all submissions
+                return View(assignment);
+            }
+            else if (User.IsInRole("Student"))
+            {
+                var student = await _userManager.GetUserAsync(User);
+                var submissions = assignment.AssignmentSubmissions.Where(s => s.Student.Id == student.Id).ToList();
 
-			if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
-			{
-				// Show all submissions
-				var submissions = assignment.AssignmentSubmissions.ToList();
-				return View(submissions);
-			}
-			else if (User.IsInRole("Student"))
-			{
-				var submissions = await _context.AssignmentSubmissions
-					.Include(s => s.Student)
-					.Include(s => s.SubmissionFiles)
-					.Where(s => s.Assignment.Id == id && s.Student.Id == student.Id)
-					.ToListAsync();
+                // Create a new Assignment object that only includes the current user's submissions
+                var assignmentForStudent = new Assignment
+                {
+                    Id = assignment.Id,
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    DueDate = assignment.DueDate,
+                    Course = assignment.Course,
+                    CourseId= assignment.CourseId,
+                    AssignmentSubmissions = submissions
+                };
+                ViewBag.CourseId = assignment.CourseId;
 
-				return View(submissions);
-			}
-			else
-			{
-				// The user is not a student or a teacher
-				return Forbid();
-			}
-		}
+                return View(assignmentForStudent);
+            }
+            else
+            {
+                // The user is not a student or a teacher
+                return Forbid();
+            }
+        }
 
-		/*
+        /*
          * Function to download assignment files
          */
-		public async Task<IActionResult> DownloadFile(int id, string fileType)
+        public async Task<IActionResult> DownloadFile(int id, string fileType)
         {
             if (fileType == "SubmissionFile")
             {

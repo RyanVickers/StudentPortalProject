@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentPortalProject.Models
 {
@@ -11,6 +13,8 @@ namespace StudentPortalProject.Models
 		public string Description { get; set; }
 		[Required]
 		public DateTime DueDate { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Weight { get; set; }
         public List<AssignmentFile> ?AssignmentFiles { get; set; } = new List<AssignmentFile>();
         public int ?CourseId { get; set; }
         public Course ?Course { get; set; }

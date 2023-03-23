@@ -26,6 +26,11 @@
 		<input asp-for="DueDate" type="datetime-local" value="@Model.DueDate.ToString("yyyy-MM-dd")" class="form-control" />
 		<span asp-validation-for="DueDate" class="text-danger"></span>
 	</div>
+		<div class="form-group">
+			<label asp-for="Weight" class="control-label"></label>
+			<input asp-for="Weight" type="number" class="form-control" />
+			<span asp-validation-for="Weight" class="text-danger"></span>
+		</div>
 	<div class="form-group">
 		<label for="files" form-control="form-label">Assignment Files</label>
 		<input type="file" class="form-control" id="files" name="files" multiple>

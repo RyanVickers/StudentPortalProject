@@ -2,16 +2,19 @@
 
 @{
     ViewData["Title"] = "Grades";
+    var course = ViewBag.Course as Course;
 }
 
 <div class="main-content">
-    @await Html.PartialAsync("_CourseNavbar", Model.FirstOrDefault()?.Course)
+    @await Html.PartialAsync("_CourseNavbar", course )
     <h1>Grades</h1>
+    <h3>Overall Grade: @ViewBag.OverallGrade</h3>
 
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Assignment</th>
+                <th>Weight</th>
                 <th>Grade</th>
             </tr>
         </thead>
@@ -20,7 +23,8 @@
             {
                 <tr>
                     <td>@item.AssignmentName</td>
-                    <td>@(item.Grade ?? 0)</td>
+                    <td>@item.Weight</td>
+                    <td>@(item.Grade.HasValue ? item.Grade.Value.ToString() : "Not Graded")</td>
                 </tr>
             }
         </tbody>
