@@ -25,9 +25,9 @@ namespace StudentPortalProject.Controllers
             var applicationDbContext = _context.Groups.Include(@ => @.Course).Include(@ => @.Student);
             return View(await applicationDbContext.ToListAsync());
         }
-
-        // GET: Groups/Details/5
-        public async Task<IActionResult> Details(int? id)
+        */
+		// GET: Groups/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Groups == null)
             {
@@ -35,8 +35,7 @@ namespace StudentPortalProject.Controllers
             }
 
             var @group = await _context.Groups
-                .Include(@ => @.Course)
-                .Include(@ => @.Student)
+                .Include(c => c.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
@@ -45,7 +44,7 @@ namespace StudentPortalProject.Controllers
 
             return View(@group);
         }
-        */
+        
 
 		// GET: Groups/Create
 		[Authorize(Roles = "Admin,Teacher")]
