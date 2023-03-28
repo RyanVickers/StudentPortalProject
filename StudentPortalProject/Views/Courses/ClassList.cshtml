@@ -7,8 +7,8 @@
 <div class="main-content">
 @await Html.PartialAsync("_CourseNavbar")
 
-<div class="page-title-with-button">
-	<h1>Classlist</h1>
+<div class="page-title-with-button m-4">
+	<h2>Classlist</h2>
 	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 	{
 		<button>
@@ -34,7 +34,9 @@
 				@if (User.IsInRole("Teacher") || User.IsInRole("Admin")){
 				<td>
 					<form method="post" asp-action="RemoveStudent" asp-route-courseId="@Model.Id" asp-route-studentId="@student.Id">
-						<button type="submit" class="btn btn-sm btn-danger">Remove</button>
+								<a href="#" class="float-end btn btn-sm btn-danger mr-1" onclick="this.parentNode.submit(); return false;">
+									<i class="bi bi-trash"></i>
+								</a>
 					</form>
 				</td>
 				}

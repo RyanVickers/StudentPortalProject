@@ -290,8 +290,8 @@ namespace StudentPortalProject.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                return RedirectToAction("ClassList", "Courses", new { id = model.CourseId });
+			}
             return View();
         }
 
@@ -323,8 +323,8 @@ namespace StudentPortalProject.Controllers
             _context.Enrollments.Remove(enrollment);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-        }
+            return RedirectToAction("ClassList", "Courses", new { id = courseId });
+		}
 
         /*
 		 * Function to display a list of students in a course
@@ -365,8 +365,9 @@ namespace StudentPortalProject.Controllers
 			var course = await _context.Course
 				.Include(c => c.Students)
 				.FirstOrDefaultAsync(c => c.Id == id);
+            ViewBag.Course = course;
 
-			if (course == null)
+            if (course == null)
 			{
 				return NotFound();
 			}
@@ -386,11 +387,30 @@ namespace StudentPortalProject.Controllers
 					AssignmentName = a.Title,
 					CourseId = id,
 					Course = course,
+					Weight = a.Weight,
 					Grade = a.AssignmentSubmissions
-						.Where(s => s.StudentId == user.Id)
-						.Max(s => s.Grade)
+						.Where(s => s.StudentId == user.Id && s.Grade != null)
+						.Select(s => s.Grade)
+						.FirstOrDefault()
 				})
 				.ToListAsync();
+
+			// Get the total weight of all assignments
+			decimal totalWeight = assignments
+				.Where(a => a.Grade.HasValue)
+				.Sum(a => a.Weight);
+
+			// Calculate the sum of the weighted grades
+			decimal weightedGradeSum = assignments
+				.Where(a => a.Grade.HasValue)
+				.Sum(a => a.Weight * a.Grade.Value);
+
+			// Calculate the overall grade average with weights
+			decimal overallGrade = totalWeight > 0
+				? weightedGradeSum / totalWeight
+				: 0;
+
+			ViewBag.OverallGrade = overallGrade.ToString("F2");
 
 			return View(assignments);
 		}

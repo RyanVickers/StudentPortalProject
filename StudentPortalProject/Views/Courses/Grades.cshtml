@@ -1,28 +1,41 @@
 ﻿@model List<StudentPortalProject.Models.GradesViewModel>
 
 @{
-    ViewData["Title"] = "Grades";
+	ViewData["Title"] = "Grades";
+	var course = ViewBag.Course as Course;
 }
 
 <div class="main-content">
-    @await Html.PartialAsync("_CourseNavbar", Model.FirstOrDefault()?.Course)
-    <h1>Grades</h1>
+	@await Html.PartialAsync("_CourseNavbar", course )
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Assignment</th>
-                <th>Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.AssignmentName</td>
-                    <td>@(item.Grade ?? 0)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<div class="page-title-with-button m-4">
+		<h2>Grades</h2>
+	</div>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Assignment</th>
+				<th>Weight</th>
+				<th>Grade</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+					<tr>
+						<td>@item.AssignmentName</td>
+						<td>@item.Weight</td>
+						<td>@(item.Grade.HasValue ? item.Grade.Value.ToString() : "Not Graded")</td>
+					</tr>
+			}
+			@if (!string.IsNullOrEmpty(ViewBag.OverallGrade))
+			{
+					<tr class="table-secondary">
+						<td colspan="2"><strong>Overall Grade</strong></td>
+						<td><strong>@ViewBag.OverallGrade</strong></td>
+					</tr>
+			}
+		</tbody>
+	</table>
 </div>
