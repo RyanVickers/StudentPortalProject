@@ -16,7 +16,6 @@
 			</button>
 		}
 </div>
-
 <table class="table">
 	<thead>
 	<tr>
@@ -26,21 +25,27 @@
 	</tr>
 	</thead>
 	<tbody>
-	@foreach (var group in Model.Groups)
-	{
-		<tr>
-			<td>
-				@group.GroupName
-				@{
-					if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
-					{
-						<a class="float-end btn btn-sm btn-danger mr-1" title="Delete Group" href="@Url.Action("Delete", "Groups", new{id = group.Id})"><i class="bi bi-trash"></i></a>
-						<a class="float-end btn btn-sm btn-success mr-1" title="Edit Group" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})"><i class="bi bi-pencil"></i></a>
-					}
-				}
-			</td>
-		</tr>
-	}
+		@foreach(var ug in (dynamic)ViewBag.UserGroups)
+		{
+			<tr>
+				<td>@ug.GroupName</td>
+			</tr>
+		}
+		@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
+		{
+			@foreach (var group in Model.Groups)
+			{
+				<tr>
+					<td>
+						@{
+							@group.GroupName
+							<a class="float-end btn btn-sm btn-danger mr-1" title="Delete Group" href="@Url.Action("Delete", "Groups", new{id = group.Id})"><i class="bi bi-trash"></i></a>
+							<a class="float-end btn btn-sm btn-success mr-1" title="Edit Group" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})"><i class="bi bi-pencil"></i></a>
+						}
+					</td>
+				</tr>
+			}
+		}
 	</tbody>
 </table>
 </div>

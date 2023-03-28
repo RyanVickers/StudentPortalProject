@@ -349,6 +349,18 @@ namespace StudentPortalProject.Controllers
 			var groups = await _context.Course
 				.Include(c => c.Groups)
 				.FirstOrDefaultAsync(c => c.Id == id);
+
+			var userGroups = _context.GroupMembers
+				.Where(gp => gp.StudentId == _userManager.GetUserId(User))
+				.Join(_context.Groups, ug => ug.GroupId, g => g.Id, (ug, g) =>
+					new GroupMemberViewModel
+					{
+						UserName = ug.Student.UserName,
+						GroupId = g.Id,
+						GroupName = ug.Group.GroupName,
+					})
+				.ToList();
+			ViewData["UserGroups"] = userGroups;
 			if(groups == null)
 			{
 				return NotFound();
