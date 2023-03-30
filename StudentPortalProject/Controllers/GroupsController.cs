@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
 using StudentPortalProject.Data.Migrations;
@@ -375,5 +376,32 @@ namespace StudentPortalProject.Controllers
 			}
 		}
 
-	}
+        public async Task<IActionResult> DeleteFile(int id)
+        {
+            var fileUpload = await _context.GroupFileUploads
+    .Include(g => g.Group)
+        .ThenInclude(g => g.Course)
+    .FirstOrDefaultAsync(g => g.Id == id);
+            int courseId = fileUpload.Group.Course.Id;
+            if (fileUpload == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (fileUpload.StudentId != user.Id)
+            {
+                return Forbid();
+            }
+            
+            // Remove the file upload entity
+            _context.GroupFileUploads.Remove(fileUpload);
+            
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("GroupList", "Courses", new { id = courseId });
+        }
+
+    }
 }

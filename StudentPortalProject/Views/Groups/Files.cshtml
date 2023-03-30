@@ -19,6 +19,7 @@
                 <th>Group Member</th>
                 <th>Upload Date</th>
                 <th>Files</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,12 @@
                                 <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="GroupFile">@f.FileName</a>
                                 <br />
                     }
+                    </td>
+                  <td>
+                        @if (file.Student.Email == User.Identity.Name)
+                        {
+                                    <a class="float-end btn btn-sm btn-danger mr-1" title="Delete Group" href="@Url.Action("DeleteFile", "Groups", new{id = file.Id})"><i class="bi bi-trash"></i></a>
+                        }
                     </td>
                 </tr>
             }

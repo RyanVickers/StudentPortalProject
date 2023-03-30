@@ -33,10 +33,19 @@ namespace StudentPortalProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MessageViewModel message)
         {
-            System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + _userManager.GetUserName(User));
-            System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + message.GroupId);
-            System.Diagnostics.Debug.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + message.message);
-            Message new_message = new Message { AddedBy = _userManager.GetUserName(User), message = message.message, GroupId = message.GroupId };
+			//check for group
+			// Check if the message is null
+			if (message == null)
+			{
+				return BadRequest("Message data is required");
+			}
+
+			if (message.GroupId == null)
+			{
+				return BadRequest("Group ID is required");
+			}
+
+			Message new_message = new Message { AddedBy = _userManager.GetUserName(User), message = message.message, GroupId = message.GroupId };
 
             _context.Messages.Add(new_message);
             _context.SaveChanges();
