@@ -1,0 +1,22 @@
+﻿@model StudentPortalProject.Models.GroupFileUpload	
+
+@{
+    ViewData["Title"] = "Submit Assignment";
+}
+
+<div class="main-content">
+
+<h1>Submit File</h1>
+
+<h2>@Model.Group.GroupName</h2>
+
+<form asp-controller="Groups" asp-action="SubmitFile" method="post" enctype="multipart/form-data">
+	<div class="form-group">
+			<label for="uploadedFiles" class="form-label">Uploaded Files</label>
+			<input type="file" class="form-control mb-2" id="uploadedFiles" name="uploadedFiles" multiple>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+	<input type="hidden" name="assignmentId" value="@Model.GroupId" />
+</form>
+
+</div>

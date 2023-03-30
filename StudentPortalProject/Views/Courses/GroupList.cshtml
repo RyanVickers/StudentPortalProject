@@ -25,12 +25,6 @@
 	</tr>
 	</thead>
 	<tbody>
-		@foreach(var ug in (dynamic)ViewBag.UserGroups)
-		{
-			<tr>
-				<td>@ug.GroupName</td>
-			</tr>
-		}
 		@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 		{
 			@foreach (var group in Model.Groups)
@@ -39,9 +33,22 @@
 					<td>
 						@{
 							@group.GroupName
+							<a class="float-end btn btn-sm btn-warning mr-1" title="Access Files" href="@Url.Action("Files", "Groups", new{id = group.Id, courseId = Model.Id})"><i class="bi bi-download"></i></a>
 							<a class="float-end btn btn-sm btn-danger mr-1" title="Delete Group" href="@Url.Action("Delete", "Groups", new{id = group.Id})"><i class="bi bi-trash"></i></a>
 							<a class="float-end btn btn-sm btn-success mr-1" title="Edit Group" href="@Url.Action("AddStudents", "Groups", new{groupId = group.Id, courseId = Model.Id})"><i class="bi bi-pencil"></i></a>
 						}
+					</td>
+				</tr>
+			}
+		}
+		else
+		{
+			@foreach (var ug in (dynamic)ViewBag.UserGroups)
+			{
+				<tr>
+					<td>
+						@ug.GroupName
+						<a class="float-end btn btn-sm btn-warning mr-1" title="Access Files" href="@Url.Action("Files", "Groups", new{id = ug.GroupId, courseId = Model.Id})"><i class="bi bi-download"></i></a>
 					</td>
 				</tr>
 			}

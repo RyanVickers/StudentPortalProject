@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortalProject.Data;
 
@@ -11,9 +12,10 @@ using StudentPortalProject.Data;
 namespace StudentPortalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230329234912_Group File Upload Feature")]
+    partial class GroupFileUploadFeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +54,21 @@ namespace StudentPortalProject.Data.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "27069550-a3ba-4691-b1bf-6ca3d0ef4418",
+                            ConcurrencyStamp = "31badb2a-3613-4506-ac86-4be417f5ef5d",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "59c360a9-6593-418f-aa62-f75b0746a164",
+                            ConcurrencyStamp = "3192149f-e4f4-4e27-95b8-1134d9921290",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "51498596-5d5f-4341-81a4-25ef402b1eb9",
+                            ConcurrencyStamp = "ec5953d3-ad23-424a-88a9-757077a8ca78",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -225,7 +227,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Announcement", (string)null);
+                    b.ToTable("Announcement");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.ApplicationUser", b =>
@@ -303,7 +305,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d7f4f7a5-26ba-4174-8ee8-35f4ab22ef9f",
+                            ConcurrencyStamp = "42c3052f-f6ce-45ac-b1a4-67d9f1a3fbcc",
                             Email = "student@test.com",
                             EmailConfirmed = true,
                             FirstName = "Student",
@@ -311,9 +313,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STUDENT@TEST.COM",
                             NormalizedUserName = "STUDENT@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEBCdDAg2YnHyWmPJLu5dYcPutu/N/fSgd4rhEO+L6mE7cpbFTBDw8j2iYcz+Emkjg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHtSMGig8l6UZAZ6nPLdD4vyYYxFygcW6L9KZwy92Val6fMse0SLlW83gcrv2UubjA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ce191363-12fd-4041-b087-722648ceeada",
+                            SecurityStamp = "1d339070-e633-4777-a414-78c5e95df409",
                             TwoFactorEnabled = false,
                             UserName = "student@test.com"
                         },
@@ -321,7 +323,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "046f5cb3-6f52-4c3c-b721-175a25ade93d",
+                            ConcurrencyStamp = "8f115e24-94e8-4b0a-82ca-ce5ae2437a8b",
                             Email = "teacher@test.com",
                             EmailConfirmed = true,
                             FirstName = "Teacher",
@@ -329,9 +331,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEACHER@TEST.COM",
                             NormalizedUserName = "TEACHER@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECq+mz9nIyE/8TNRtLKhRQJRD+fXM2MuM8WEx7ZoZx9dkyWTn6ykYxxNodhfCBev+Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBmchZD0DJau1tLirUO8fUFCJq+zsz7BOjRo40iMHauiTN8EtnODbhC2gFucXfD1Tg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "80de862b-1ed3-4321-ba51-e52dc570a148",
+                            SecurityStamp = "b22675bc-7b92-4c04-ab50-bb793f832027",
                             TwoFactorEnabled = false,
                             UserName = "teacher@test.com"
                         },
@@ -339,7 +341,7 @@ namespace StudentPortalProject.Data.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4792a6a8-5a29-4253-89c5-fde404dbb151",
+                            ConcurrencyStamp = "a0491cce-c8c3-40dc-9353-8526136db7ec",
                             Email = "admin@test.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -347,9 +349,9 @@ namespace StudentPortalProject.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@TEST.COM",
                             NormalizedUserName = "ADMIN@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAjSH9sBxOxNe7QeTh5/Xy++Qq9Pv6cgps0dnzu98pnvilBWHlUxRXfbMg/ZaDuEVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIbt/z5iYrZbZ/rfCOsAahed4SNDt6mOGan+Ifvht+qLnwFScnpicdmW1r3/Jixx+g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "91c06551-75ac-4327-8b85-89bfb1b4e522",
+                            SecurityStamp = "ba986056-4c10-4d45-b221-43e1ee1f88a8",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
                         });
@@ -384,7 +386,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Assignment", (string)null);
+                    b.ToTable("Assignment");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.AssignmentFile", b =>
@@ -410,7 +412,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("AssignmentFiles", (string)null);
+                    b.ToTable("AssignmentFiles");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.AssignmentSubmission", b =>
@@ -440,7 +442,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("AssignmentSubmissions", (string)null);
+                    b.ToTable("AssignmentSubmissions");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Course", b =>
@@ -466,7 +468,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Enrollment", b =>
@@ -503,7 +505,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.GroupFile", b =>
@@ -532,7 +534,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("FileUploadId");
 
-                    b.ToTable("GroupFiles", (string)null);
+                    b.ToTable("GroupFiles");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.GroupFileUpload", b =>
@@ -559,7 +561,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("GroupFileUploads", (string)null);
+                    b.ToTable("GroupFileUploads");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.GroupMember", b =>
@@ -574,7 +576,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("GroupMembers", (string)null);
+                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Lecture", b =>
@@ -600,7 +602,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lectures", (string)null);
+                    b.ToTable("Lectures");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.LectureFile", b =>
@@ -626,7 +628,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("LectureId");
 
-                    b.ToTable("LectureFiles", (string)null);
+                    b.ToTable("LectureFiles");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.Message", b =>
@@ -650,7 +652,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.SubmissionFile", b =>
@@ -676,7 +678,7 @@ namespace StudentPortalProject.Data.Migrations
 
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("SubmissionFiles", (string)null);
+                    b.ToTable("SubmissionFiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -834,7 +836,7 @@ namespace StudentPortalProject.Data.Migrations
             modelBuilder.Entity("StudentPortalProject.Models.GroupFileUpload", b =>
                 {
                     b.HasOne("StudentPortalProject.Models.Group", "Group")
-                        .WithMany("GroupFileUploads")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -923,11 +925,6 @@ namespace StudentPortalProject.Data.Migrations
                     b.Navigation("Groups");
 
                     b.Navigation("Lectures");
-                });
-
-            modelBuilder.Entity("StudentPortalProject.Models.Group", b =>
-                {
-                    b.Navigation("GroupFileUploads");
                 });
 
             modelBuilder.Entity("StudentPortalProject.Models.GroupFileUpload", b =>

@@ -4,19 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentPortalProject.Data;
+using StudentPortalProject.Data.Migrations;
 using StudentPortalProject.Models;
 using System.Data;
+using GroupMember = StudentPortalProject.Models.GroupMember;
 
 namespace StudentPortalProject.Controllers
 {
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GroupsController(ApplicationDbContext context)
+        public GroupsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-        }
+			_userManager = userManager;
+			_userManager.Users.ToList();
+		}
 
 		/*
         // GET: Groups
@@ -251,5 +256,103 @@ namespace StudentPortalProject.Controllers
         {
           return _context.Groups.Any(e => e.Id == id);
         }
-    }
+        [Authorize(Roles = "Admin,Teacher, Student")]
+        public async Task<IActionResult> Files(int id, int courseId)
+        {
+            ViewData["GroupId"] = id;
+            ViewData["CourseId"] = courseId;
+
+            var assignment = await _context.Groups
+                .Include(a => a.GroupFileUploads)
+                    .ThenInclude(s => s.Student)
+                .Include(a => a.GroupFileUploads)
+                    .ThenInclude(s => s.GroupFiles)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            return View(assignment);
+        }
+
+        [HttpGet]
+        public IActionResult SubmitFile(int id)
+        {
+            var student = _userManager.GetUserAsync(User).Result;
+
+            
+            var group = _context.Groups
+                .FirstOrDefault(g => g.Id == id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            var submission = new GroupFileUpload
+            {
+                GroupId = group.Id,
+                Group = group,
+                StudentId = student.Id,
+                Student = student,
+                SubmissionDate = DateTime.Now
+            };
+            
+
+            return View(submission);
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> SubmitFile(int id, IFormFile[] uploadedFiles)
+		{
+			var student = await _userManager.GetUserAsync(User);
+			var group = await _context.Groups.FindAsync(id);
+
+			var fileupload = new GroupFileUpload
+			{
+				GroupId = group.Id,
+				Group = group,
+				StudentId = student.Id,
+				Student = student,
+				SubmissionDate = DateTime.Now,
+				GroupFiles = new List<GroupFile>()
+			};
+
+
+			_context.GroupFileUploads.Add(fileupload);
+			await _context.SaveChangesAsync();
+
+			foreach (var file in uploadedFiles)
+			{
+				if (file.Length > 0)
+				{
+					var fileName = Path.GetFileName(file.FileName);
+					var fileData = new byte[file.Length];
+					using (var stream = new MemoryStream())
+					{
+						await file.CopyToAsync(stream);
+						fileData = stream.ToArray();
+					}
+
+					var submissionFile = new GroupFile
+					{
+						FileName = fileName,
+						FileData = fileData,
+						SubmissionId = fileupload.Id,
+						FileUpload = fileupload
+					};
+
+					_context.GroupFiles.Add(submissionFile);
+					fileupload.GroupFiles.Add(submissionFile);
+				}
+			}
+
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction("Index", "Assignments", new { id = group.CourseId });
+		}
+
+	}
 }

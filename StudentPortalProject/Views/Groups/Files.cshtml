@@ -1,0 +1,51 @@
+﻿@model Group
+
+@{
+    ViewData["Title"] = "Group Files";
+}
+
+<div class="main-content">
+    <div class="page-title-with-back-menu">
+        <a asp-controller="Courses" asp-action="GroupList" asp-route-id="@ViewBag.CourseId" class="">
+            <i class="bi bi-chevron-left"></i>
+            Back
+        </a>
+        <h1 class=""></h1>
+    </div>
+    <a class="btn btn-sm btn-primary col m-2" href="@Url.Action("SubmitFile", "Groups", new { id = ViewBag.GroupId})">Upload Files</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Group Member</th>
+                <th>Upload Date</th>
+                <th>Files</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model.GroupFileUploads)
+            {
+                    <tr>
+                        <td>@(file.Student.FirstName + " " + file.Student.LastName)</td>
+                        <td>@file.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+                        <td>
+                        @foreach (var f in file.GroupFiles)
+                        {
+                                    <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="SubmissionFile">@f.FileName</a>
+                                    <br />
+                        }
+                        </td>
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                    {
+                                <td>
+                                    <form asp-action="Grade" asp-controller="Assignments" method="post">
+                                        <input type="hidden" name="submissionId" value="@file.Id" />
+                                        <button type="submit">Submit</button>
+                                    </form>
+                                </td>
+                    }
+                    </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

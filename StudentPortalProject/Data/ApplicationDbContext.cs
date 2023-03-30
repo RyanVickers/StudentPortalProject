@@ -18,10 +18,12 @@ namespace StudentPortalProject.Data
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; }
-        public DbSet<LectureFile> LectureFiles { get; set; }
+		public DbSet<GroupFileUpload> GroupFileUploads { get; set; }
+		public DbSet<LectureFile> LectureFiles { get; set; }
         public DbSet<AssignmentFile> AssignmentFiles { get; set; }
         public DbSet<SubmissionFile> SubmissionFiles { get; set; }
-        public DbSet<Group> Groups { get; set; }
+		public DbSet<GroupFile> GroupFiles { get; set; }
+		public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
         public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
