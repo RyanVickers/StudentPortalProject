@@ -30,7 +30,7 @@
                         <td>
                         @foreach (var f in file.GroupFiles)
                         {
-                                    <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="SubmissionFile">@f.FileName</a>
+                                    <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="GroupFile">@f.FileName</a>
                                     <br />
                         }
                         </td>

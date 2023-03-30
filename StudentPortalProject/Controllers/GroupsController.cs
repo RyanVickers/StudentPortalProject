@@ -354,5 +354,26 @@ namespace StudentPortalProject.Controllers
 			return RedirectToAction("Index", "Assignments", new { id = group.CourseId });
 		}
 
+		/*
+         * Function to download files
+         */
+		public async Task<IActionResult> DownloadFile(int id, string fileType)
+		{
+			if (fileType == "GroupFile")
+			{
+				var file = await _context.GroupFiles.FindAsync(id);
+				if (file == null)
+				{
+					return NotFound();
+				}
+
+				return File(file.FileData, "application/octet-stream", file.FileName);
+			}
+			else
+			{
+				return BadRequest("Invalid file type.");
+			}
+		}
+
 	}
 }
