@@ -352,8 +352,8 @@ namespace StudentPortalProject.Controllers
 
 			await _context.SaveChangesAsync();
 
-			return RedirectToAction("Index", "Assignments", new { id = group.CourseId });
-		}
+            return RedirectToAction("GroupList", "Courses", new { id = fileupload.Group.CourseId });
+        }
 
 		/*
          * Function to download files
