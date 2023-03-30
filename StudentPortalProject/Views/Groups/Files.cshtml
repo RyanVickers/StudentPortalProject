@@ -24,26 +24,17 @@
         <tbody>
             @foreach (var file in Model.GroupFileUploads)
             {
-                    <tr>
-                        <td>@(file.Student.FirstName + " " + file.Student.LastName)</td>
-                        <td>@file.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
-                        <td>
-                        @foreach (var f in file.GroupFiles)
-                        {
-                                    <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="GroupFile">@f.FileName</a>
-                                    <br />
-                        }
-                        </td>
-                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+                <tr>
+                    <td>@(file.Student.FirstName + " " + file.Student.LastName)</td>
+                    <td>@file.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>
+                    @foreach (var f in file.GroupFiles)
                     {
-                                <td>
-                                    <form asp-action="Grade" asp-controller="Assignments" method="post">
-                                        <input type="hidden" name="submissionId" value="@file.Id" />
-                                        <button type="submit">Submit</button>
-                                    </form>
-                                </td>
+                                <a asp-action="DownloadFile" asp-route-id="@f.Id" asp-route-fileType="GroupFile">@f.FileName</a>
+                                <br />
                     }
-                    </tr>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
