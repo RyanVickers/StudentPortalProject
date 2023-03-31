@@ -1,8 +1,8 @@
 ﻿@using StudentPortalProject.Models
 @model List<StudentPortalProject.Models.UserRolesViewModel>
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="main-content">
 <h1>User Roles</h1>
@@ -21,7 +21,7 @@
 			<td>@user.Email</td>
 			<td>@string.Join(" , ", user.Roles.ToList())</td>
 			<td>
-				<a class="btn btn-primary" asp-controller="UserRoles" asp-action="Manage" asp-route-userId="@user.UserId">Manage Roles</a>
+				<a class="blue-button btn link-unstyled" asp-controller="UserRoles" asp-action="Manage" asp-route-userId="@user.UserId">Manage Roles</a>
 			</td>
 		</tr>
 	}

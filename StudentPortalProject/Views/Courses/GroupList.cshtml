@@ -11,7 +11,7 @@
 	<h2>Groups</h2>
 		@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 		{
-			<button class="blue-button">
+			<button class="blue-button btn">
 				<a href="@Url.Action("Create", "Groups", new{id = Model.Id})"><i class="bi bi-plus-lg color-white"></i> New Group</a>
 			</button>
 		}

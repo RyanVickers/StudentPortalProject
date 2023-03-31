@@ -41,7 +41,7 @@
                             <form asp-action="Grade" asp-controller="Assignments" method="post">
                                 <input type="hidden" name="submissionId" value="@submission.Id" />
                                 <input type="number" name="grade" step="0.1" value="@submission.Grade" />
-                                <button type="submit">Submit</button>
+                                <button type="submit" class="blue-button btn">Submit</button>
                             </form>
                         </td>
                     }

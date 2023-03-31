@@ -1,22 +1,30 @@
 ﻿@model StudentPortalProject.Models.GroupFileUpload	
 
 @{
-    ViewData["Title"] = "Submit Assignment";
+	ViewData["Title"] = "Submit Assignment";
 }
 
 <div class="main-content">
+	<div class="page-title-with-back-menu">
+		<a class="link-unstyled" title="Back to Files" href="@Url.Action("Files", "Groups", new { id = Model.GroupId, courseId = Model.Id })">
+			<i class="bi bi-chevron-left"></i>
+			Cancel
+		</a>
+		<h1>Submit File for @Model.Group.GroupName</h1>
+	</div>
 
-<h1>Submit File</h1>
 
-<h2>@Model.Group.GroupName</h2>
+
 
 <form asp-controller="Groups" asp-action="SubmitFile" method="post" enctype="multipart/form-data">
 	<div class="form-group">
-			<label for="uploadedFiles" class="form-label">Uploaded Files</label>
-			<input type="file" class="form-control mb-2" id="uploadedFiles" name="uploadedFiles" multiple>
+		<label for="uploadedFiles" class="form-label">Uploaded Files</label>
+		<input type="file" class="form-control mb-2" id="uploadedFiles" name="uploadedFiles" multiple>
 	</div>
-	<button type="submit" class="btn btn-primary">Submit</button>
-	<input type="hidden" name="assignmentId" value="@Model.GroupId" />
+		<div class="text-center m-5">
+	<button type="submit" class="blue-button btn">Submit</button>
+		<input type="hidden" name="assignmentId" value="@Model.GroupId" />
+		</div>
 </form>
 
 </div>

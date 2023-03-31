@@ -110,6 +110,9 @@ a:hover {
     color: var(--main-blue)
 }
 
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background: var(--main-blue);
+}
 /* ----- Buttons ----- */
 button, .blue-button {
     border-radius: 5px;
@@ -129,6 +132,9 @@ button, .blue-button {
         border-color: var(--main-green);
     }
 
+.btn:hover {
+    color: lightblue;
+}
 .dark-blue-button {
     background: var(--dark-blue);
     width: 170px;

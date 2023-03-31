@@ -13,7 +13,7 @@
 
 	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 	{
-		<button class="blue-button">
+		<button class="blue-button btn">
 	<a asp-controller="Announcements" asp-action="Create" asp-route-id="@Model.Id">Create Announcement</a>
 	</button>
 	}

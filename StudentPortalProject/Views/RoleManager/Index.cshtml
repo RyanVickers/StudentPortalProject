@@ -1,18 +1,18 @@
 ﻿@model List<Microsoft.AspNetCore.Identity.IdentityRole>
 @{
-    ViewData["Title"] = "Role Manager";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Role Manager";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="main-content">
 <h1>Role Manager</h1>
 <form method="post" asp-action="AddRole" asp-controller="RoleManager">
-    <div class="input-group">
-        <input name="roleName" class="form-control w-25">
-        <span class="input-group-btn">
-            <button>Add New Role</button>
-        </span>
-    </div>
+	<div class="input-group">
+		<input name="roleName" class="form-control w-25">
+		<span class="input-group-btn">
+			<button class="blue-button btn">Add New Role</button>
+		</span>
+	</div>
 </form>
 <table class="table table-striped">
 	<thead>

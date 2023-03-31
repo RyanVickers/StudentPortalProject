@@ -11,7 +11,7 @@
 	<h2>Lectures</h2>
 	@if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 	{
-		<button class="blue-button">
+		<button class="blue-button btn">
 	<a asp-controller="Lectures" asp-action="Create" asp-route-id="@Model.Id">Create Lecture</a>
 	</button>
 	}

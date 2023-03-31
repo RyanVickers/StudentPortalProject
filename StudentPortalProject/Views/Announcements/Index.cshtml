@@ -11,7 +11,7 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
 {
 	<div class="justify-content-end">
-	<button class="m-4 float-end blue-button">
+	<button class="m-4 float-end blue-button btn">
 		<a asp-controller="Courses" asp-action="Create" asp-route-id="@Model.Id">
 			<i class="bi bi-plus-lg"></i> New Announcement
 		</a>

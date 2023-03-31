@@ -76,31 +76,34 @@
 			{
 				days = (int)(@assignment.DueDate - DateTime.Today).TotalDays;
 				<a class="link-unstyled" asp-controller="Assignments" asp-action="Index" asp-route-id="@assignment.CourseId">
-					@if (days < 3)
+					@if (days >= -2)
 					{
-						<div class="card alert alert-danger clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
-							<h5 class="upcoming-title text-center">@assignment.Title</h5>
-							<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
-							<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
-						</div>
-					}
-					else if (days < 8)
-					{
-						<div class="card alert alert-warning clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
-							
+						@if (days < 3)
+						{
+							<div class="card alert alert-danger clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
 								<h5 class="upcoming-title text-center">@assignment.Title</h5>
 								<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
 								<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
 							</div>
-						
-					}
-					else
-					{
-						<div class="card alert alert-secondary clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
-							<h5 class="upcoming-title text-center">@assignment.Title</h5>
-							<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
-							<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
-						</div>
+						}
+						else if (days < 8 && days >= 0)
+						{
+							<div class="card alert alert-warning clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
+
+								<h5 class="upcoming-title text-center">@assignment.Title</h5>
+								<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
+								<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
+							</div>
+
+						}
+						else
+						{
+							<div class="card alert alert-secondary clickable upcoming-card" title="View Assignments for @assignment.Course.CourseName">
+								<h5 class="upcoming-title text-center">@assignment.Title</h5>
+								<h6 class="upcoming-date text-center"><em>@days days left</em></h6>
+								<p class="upcoming-title text-center">@assignment.Course.CourseName</p>
+							</div>
+						}
 					}
 				</a>
 			}
