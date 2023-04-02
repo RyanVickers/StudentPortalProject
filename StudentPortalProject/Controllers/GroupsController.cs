@@ -257,9 +257,21 @@ namespace StudentPortalProject.Controllers
         {
           return _context.Groups.Any(e => e.Id == id);
         }
+
         [Authorize(Roles = "Admin,Teacher, Student")]
         public async Task<IActionResult> Files(int id, int courseId)
         {
+            var groupMembers = _context.GroupMembers
+                .Where(gm => gm.GroupId == id)
+                .Select(gm => gm.Student);
+			var student = await _userManager.GetUserAsync(User);
+
+			if (!groupMembers.Contains(student))
+            {
+                return NotFound();
+            }
+            
+
             ViewData["GroupId"] = id;
             ViewData["CourseId"] = courseId;
 
