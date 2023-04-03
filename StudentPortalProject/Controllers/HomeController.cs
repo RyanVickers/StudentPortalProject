@@ -48,6 +48,30 @@ namespace StudentPortalProject.Controllers
 			return assignments;
 		}
 
+		/*
+		 * Returns a list of groups that the user is in
+		 */
+		public async Task<List<Group>> getGroups(GroupMember userMember)
+		{
+			var groups = await _context.Groups
+				.Where(g => g.Id == userMember.GroupId)
+				.ToListAsync();
+
+			return groups;
+		}
+
+		/*
+		 * Returns a list of group members of the groups gathered.
+		 */
+		public async Task<List<GroupMember>> getGroupMembers(Group group)
+		{
+			var groupMembers = await _context.GroupMembers
+				.Where(g => g.GroupId == group.Id)
+				.ToListAsync();
+
+			return groupMembers;
+		}
+
 		public async Task<IActionResult> Index()
 		{
 			if (!User.Identity.IsAuthenticated)
@@ -60,6 +84,14 @@ namespace StudentPortalProject.Controllers
 				var role = await _userManager.GetRolesAsync(user);
 				List<Course> courses;
 				List<Assignment> assignmentList = new List<Assignment>();
+
+				//List of groups that only the user is in.
+				List<Group> groupList = new List<Group>();
+				//List of group members from above groups.
+				List<GroupMember> groupMemberList = new List<GroupMember>();
+				//List of user's instances in groups
+				List<GroupMember> userGroupMemberList = new List<GroupMember>();
+
 				if (role.Contains("Student"))
 				{
 					courses = await _context.Course
@@ -67,9 +99,25 @@ namespace StudentPortalProject.Controllers
 						.Where(c => c.Students.Any(e => e.Id == user.Id))
 						.ToListAsync();
 
+					userGroupMemberList = await _context.GroupMembers
+						.Where(g => g.StudentId == user.Id)
+						.ToListAsync();
+
 					foreach (Course c in courses)
 					{
 						assignmentList.AddRange(await getAssignments(c));
+					}
+
+					//Grabbing each group the user is a part of.
+					foreach (GroupMember u in userGroupMemberList)
+					{
+						groupList.AddRange(await getGroups(u));
+					}
+
+					//Only grabbing members from groups the user is in.
+					foreach (Group g in groupList)
+					{
+						groupMemberList.AddRange(await getGroupMembers(g));
 					}
 				}
 				else if (role.Contains("Teacher"))
@@ -97,6 +145,8 @@ namespace StudentPortalProject.Controllers
 					courses = new List<Course>();
 				}
 				ViewData["Assignments"] = assignmentList;
+				ViewData["Groups"] = groupList;
+				ViewData["GroupMembers"] = groupMemberList;
 				return View(courses);
 
 			}

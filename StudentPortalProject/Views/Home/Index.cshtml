@@ -107,6 +107,31 @@
 					}
 				</a>
 			}
+
+			@if (User.IsInRole("Student") && (ViewData["Groups"] as IList<Group>).Count > 0)
+			{
+				<h2 class="home-title">Active Groups</h2>
+				@foreach (var group in ViewData["Groups"] as IList<Group>)
+				{
+					var listOfMembers = (string)"";
+
+					@foreach (var groupMember in ViewData["GroupMembers"] as IList<GroupMember>)
+					{
+						@if (groupMember.GroupId == group.Id)
+						{
+							listOfMembers += groupMember.Student.FirstName.ToString() + " " + groupMember.Student.LastName.ToString() + ", ";
+						}
+					}
+
+					<a class="link-unstyled" title="Access Files" href="@Url.Action("Files", "Groups", new{id = group.Id, courseId = group.CourseId})">
+						<div class="card alert alert-secondary clickable upcoming-card" title="View Assignments for @group.Course.CourseName">
+							<h5 class="upcoming-title text-center">@group.GroupName</h5>
+							<p class="upcoming-title text-center">@listOfMembers.Remove((listOfMembers.Length)-2)</p>
+							<p class="upcoming-title text-center">@group.Course.CourseName</p>
+						</div>
+					</a>
+				}
+			}
 		</div>
 
 	}
