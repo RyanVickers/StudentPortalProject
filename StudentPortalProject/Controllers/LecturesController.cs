@@ -52,8 +52,8 @@ namespace StudentPortalProject.Controllers
 				.FirstOrDefaultAsync(c => c.Id == id);
 
 			// Check if the current user is a student of the course
-			if (!courseStudents.Students.Any(s => s.Id == user.Id))
-			{
+			if (!course.Students.Any(s => s.Id == user.Id) && course.Teacher.Id != user.Id && !User.IsInRole("Admin"))
+            {
 				return Forbid();
 			}
 
