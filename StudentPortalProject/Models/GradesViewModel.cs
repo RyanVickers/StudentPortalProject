@@ -8,5 +8,6 @@
         public Course? Course { get; set; }
         public decimal Weight { get; set; }
         public decimal? Grade { get; set; }
-    }
+		public string? Comment { get; set; }
+	}
 }

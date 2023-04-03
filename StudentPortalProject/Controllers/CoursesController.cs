@@ -444,15 +444,20 @@ namespace StudentPortalProject.Controllers
                     CourseId = id,
                     Course = course,
                     Weight = a.Weight,
-                    Grade = a.AssignmentSubmissions
-                        .Where(s => s.StudentId == user.Id && s.Grade != null)
-                        .Select(s => s.Grade)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+					Grade = a.AssignmentSubmissions
+			.Where(s => s.StudentId == user.Id && s.Grade != null)
+			.Max(s => s.Grade),
+					Comment = a.AssignmentSubmissions
+			.Where(s => s.StudentId == user.Id && s.Grade != null && s.Grade == a.AssignmentSubmissions
+				.Where(ss => ss.StudentId == user.Id && ss.Grade != null)
+				.Max(ss => ss.Grade))
+			.Select(s => s.Comment)
+			.FirstOrDefault()
+				})
+	.ToListAsync();
 
-            // Get the total weight of all assignments
-            decimal totalWeight = assignments
+			// Get the total weight of all assignments
+			decimal totalWeight = assignments
                 .Where(a => a.Grade.HasValue)
                 .Sum(a => a.Weight);
 

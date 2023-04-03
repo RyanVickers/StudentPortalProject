@@ -18,23 +18,26 @@
 				<th>Assignment</th>
 				<th>Weight</th>
 				<th>Grade</th>
+				<th style="width: 50%">Comment</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model)
 			{
-					<tr>
-						<td>@item.AssignmentName</td>
-						<td>@item.Weight</td>
-						<td>@(item.Grade.HasValue ? item.Grade.Value.ToString() : "Not Graded")</td>
-					</tr>
+				<tr>
+					<td>@item.AssignmentName</td>
+					<td>@item.Weight</td>
+					<td>@(item.Grade.HasValue ? item.Grade.Value.ToString() : "Not Graded")</td>
+					<td>@item.Comment</td>
+				</tr>
 			}
 			@if (!string.IsNullOrEmpty(ViewBag.OverallGrade))
 			{
-					<tr class="table-secondary">
-						<td colspan="2"><strong>Overall Grade</strong></td>
-						<td><strong>@ViewBag.OverallGrade</strong></td>
-					</tr>
+				<tr class="table-secondary">
+					<td colspan="2"><strong>Overall Grade</strong></td>
+					<td><strong>@ViewBag.OverallGrade</strong></td>
+					<td></td>
+				</tr>
 			}
 		</tbody>
 	</table>

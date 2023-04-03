@@ -459,7 +459,7 @@ namespace StudentPortalProject.Controllers
 		[HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = "Admin,Teacher")]
-		public async Task<IActionResult> Grade(int id, int submissionId, int grade)
+		public async Task<IActionResult> Grade(int id, int submissionId, int grade, string comment)
         {
             var submission = await _context.AssignmentSubmissions.FindAsync(submissionId);
 
@@ -469,8 +469,9 @@ namespace StudentPortalProject.Controllers
             }
 
             submission.Grade = grade;
+			submission.Comment = comment;
 
-            await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 
             return RedirectToAction("Submissions","Assignments", new { id = submission.AssignmentId });
         }

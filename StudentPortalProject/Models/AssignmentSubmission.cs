@@ -13,7 +13,8 @@ namespace StudentPortalProject.Models
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal ?Grade { get; set; }
-        public DateTime SubmissionDate { get; set; }
+		public string ?Comment { get; set; }
+		public DateTime SubmissionDate { get; set; }
         public virtual ICollection<SubmissionFile> SubmissionFiles { get; set; }
     }
 }

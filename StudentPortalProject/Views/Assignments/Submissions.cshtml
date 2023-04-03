@@ -1,57 +1,67 @@
 ﻿@model Assignment
 
 @{
-    ViewData["Title"] = "Submissions";
+	ViewData["Title"] = "Submissions";
 }
 
 <div class="main-content">
-    <div class="page-title-with-back-menu">
-        <a asp-controller="Assignments" asp-action="Index" asp-route-id="@ViewBag.CourseId" class="">
-            <i class="bi bi-chevron-left"></i>
-            Cancel
-        </a>
-<h1 class="">@Model.Title</h1>
-    </div>
+	<div class="page-title-with-back-menu">
+		<a asp-controller="Assignments" asp-action="Index" asp-route-id="@ViewBag.CourseId" class="">
+			<i class="bi bi-chevron-left"></i>
+			Cancel
+		</a>
+		<h1 class="">@Model.Title</h1>
+	</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Submission Date</th>
-                <th>Files</th>
-                <th>Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var submission in Model.AssignmentSubmissions)
-            {
-                <tr>
-                    <td>@(submission.Student.FirstName + " " + submission.Student.LastName)</td>
-                    <td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
-                    <td>
-                        @foreach (var file in submission.SubmissionFiles)
-                        {
-                            <a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="SubmissionFile">@file.FileName</a>
-                            <br />
-                        }
-                    </td>
-                    @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <form asp-action="Grade" asp-controller="Assignments" method="post">
-                                <input type="hidden" name="submissionId" value="@submission.Id" />
-                                <input type="number" name="grade" step="0.1" value="@submission.Grade" />
-                                <button type="submit" class="blue-button btn">Submit</button>
-                            </form>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>@submission.Grade</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Student</th>
+				<th>Submission Date</th>
+				<th>Files</th>
+				<th>Grade</th>
+				@if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+				{
+					<th style="width: 25%">Comment</th>
+				}
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var submission in Model.AssignmentSubmissions)
+			{
+				<tr>
+					<td>@(submission.Student.FirstName + " " + submission.Student.LastName)</td>
+					<td>@submission.SubmissionDate.ToString("dd/MM/yyyy hh:mm tt")</td>
+					<td>
+						@foreach (var file in submission.SubmissionFiles)
+						{
+							<a asp-action="DownloadFile" asp-route-id="@file.Id" asp-route-fileType="SubmissionFile">@file.FileName</a>
+							<br />
+						}
+					</td>
+					@if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+					{
+						<form asp-action="Grade" asp-controller="Assignments" method="post">
+							<input type="hidden" name="submissionId" value="@submission.Id" />
+						<td>
+							<input type="number" class="form-control" name="grade" step="0.1" value="@submission.Grade" />
+						</td>
+						<td>
+							<textarea name="comment" class="form-control" rows="2" placeholder="Add comment here">@submission.Comment</textarea>
+						</td>
+						<td>
+							<button type="submit" class="blue-button btn">Submit</button>
+						</td>
+						</form>
+					}
+					else
+					{
+						<td>@submission.Grade</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
 
 </div>
