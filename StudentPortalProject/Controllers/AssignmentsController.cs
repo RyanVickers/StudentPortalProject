@@ -36,13 +36,30 @@ namespace StudentPortalProject.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Course.Include(c => c.Assignments).ThenInclude(l => l.AssignmentFiles).FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _context.Course
+                .Include(c => c.Assignments)
+                .ThenInclude(l => l.AssignmentFiles)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Get students in the course
+			var courseStudents = await _context.Course
+				.Include(c => c.Students)
+				.FirstOrDefaultAsync(c => c.Id == id);
+
+			// Check if the current user is a student of the course
+			if (!courseStudents.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
+			}
+
+			return View(course);
         }
 
         // GET: Assignments/Details/5

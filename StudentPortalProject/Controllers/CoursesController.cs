@@ -21,7 +21,6 @@ namespace StudentPortalProject.Controllers
 			_context = context;
 			_userManager = userManager;
 			_userManager.Users.ToList();
-
 		}
 
 		//TODO: Let teacher or admin view all students and assign them to classes
@@ -67,9 +66,24 @@ namespace StudentPortalProject.Controllers
 			var course = await _context.Course
                 .Include(c => c.Announcements)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
 			if (course == null)
 			{
 				return NotFound();
+			}
+
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Get students in the course
+			var courseStudents = await _context.Course
+				.Include(c => c.Students)
+				.FirstOrDefaultAsync(c => c.Id == id);
+
+			// Check if the current user is a student of the course
+			if (!courseStudents.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
 			}
 
 			return View(course);
@@ -338,6 +352,15 @@ namespace StudentPortalProject.Controllers
 			{
 				return NotFound();
 			}
+
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Check if the current user is a student of the course
+			if (!course.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
+			}
 			return View(course);
 		}
 
@@ -346,20 +369,41 @@ namespace StudentPortalProject.Controllers
 		 */
 		public async Task<IActionResult> GroupList(int id)
 		{
+
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Get the course by id
+			var course = await _context.Course
+				.Include(c => c.Students)
+				.FirstOrDefaultAsync(c => c.Id == id);
+			ViewBag.Course = course;
+
+			if (course == null)
+			{
+				return NotFound();
+			}
+
+			// Check if the current user is a student of the course
+			if (!course.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
+			}
+
 			var groups = await _context.Course
 				.Include(c => c.Groups)
 				.FirstOrDefaultAsync(c => c.Id == id);
 
             var userGroups = _context.GroupMembers
-    .Where(gp => gp.StudentId == _userManager.GetUserId(User))
-    .Join(_context.Groups.Where(g => g.CourseId == id), ug => ug.GroupId, g => g.Id, (ug, g) =>
-        new GroupMemberViewModel
-        {
-            UserName = ug.Student.UserName,
-            GroupId = g.Id,
-            GroupName = ug.Group.GroupName,
-        })
-    .ToList();
+				.Where(gp => gp.StudentId == _userManager.GetUserId(User))
+				.Join(_context.Groups.Where(g => g.CourseId == id), ug => ug.GroupId, g => g.Id, (ug, g) =>
+					new GroupMemberViewModel
+					{
+						UserName = ug.Student.UserName,
+						GroupId = g.Id,
+						GroupName = ug.Group.GroupName,
+					})
+				.ToList();
             ViewData["UserGroups"] = userGroups;
             if (groups == null)
 			{

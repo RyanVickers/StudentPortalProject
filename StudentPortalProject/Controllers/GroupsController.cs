@@ -268,26 +268,26 @@ namespace StudentPortalProject.Controllers
 
 			if (!groupMembers.Contains(student))
             {
-                return NotFound();
-            }
+				return Forbid();
+			}
             
 
             ViewData["GroupId"] = id;
             ViewData["CourseId"] = courseId;
 
-            var assignment = await _context.Groups
+            var files = await _context.Groups
                 .Include(a => a.GroupFileUploads)
                     .ThenInclude(s => s.Student)
                 .Include(a => a.GroupFileUploads)
                     .ThenInclude(s => s.GroupFiles)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (assignment == null)
+            if (files == null)
             {
                 return NotFound();
             }
 
-            return View(assignment);
+            return View(files);
         }
 
         [HttpGet]

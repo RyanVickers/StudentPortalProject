@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,13 @@ namespace StudentPortalProject.Controllers
 	public class LecturesController : Controller
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<ApplicationUser> _userManager;
 
-		public LecturesController(ApplicationDbContext context)
+		public LecturesController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
 		{
 			_context = context;
+			_userManager = userManager;
+			_userManager.Users.ToList();
 		}
 
 		// GET: Lectures
@@ -30,10 +34,27 @@ namespace StudentPortalProject.Controllers
 				return NotFound();
 			}
 
-			var course = await _context.Course.Include(c => c.Lectures).ThenInclude(l => l.LectureFiles).FirstOrDefaultAsync(m => m.Id == id);
+			var course = await _context.Course
+				.Include(c => c.Lectures)
+				.ThenInclude(l => l.LectureFiles)
+				.FirstOrDefaultAsync(m => m.Id == id);
 			if (course == null)
 			{
 				return NotFound();
+			}
+
+			// Get the current user
+			var user = await _userManager.GetUserAsync(User);
+
+			// Get students in the course
+			var courseStudents = await _context.Course
+				.Include(c => c.Students)
+				.FirstOrDefaultAsync(c => c.Id == id);
+
+			// Check if the current user is a student of the course
+			if (!courseStudents.Students.Any(s => s.Id == user.Id))
+			{
+				return Forbid();
 			}
 
 			return View(course);
