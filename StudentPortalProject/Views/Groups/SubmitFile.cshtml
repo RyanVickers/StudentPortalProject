@@ -6,7 +6,7 @@
 
 <div class="main-content">
 	<div class="page-title-with-back-menu">
-		<a class="link-unstyled" title="Back to Files" href="@Url.Action("Files", "Groups", new { id = Model.GroupId, courseId = Model.Id })">
+		<a class="link-unstyled" title="Back to Files" href="@Url.Action("Files", "Groups", new { id = Model.GroupId, courseId = Model.Group.CourseId })">
 			<i class="bi bi-chevron-left"></i>
 			Cancel
 		</a>
