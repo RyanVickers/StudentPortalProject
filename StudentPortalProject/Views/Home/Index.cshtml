@@ -71,8 +71,10 @@
 			<h2 class="home-title">Upcoming Assignments</h2>
 			@{
 				int days = 0;
+				var assignments = (ViewData["Assignments"] as IList<Assignment>)
+				.OrderBy(a => a.DueDate);
 			}
-			@foreach(var assignment in ViewData["Assignments"] as IList<Assignment>)
+			@foreach (var assignment in assignments)
 			{
 				days = (int)(@assignment.DueDate - DateTime.Today).TotalDays;
 				<a class="link-unstyled" asp-controller="Assignments" asp-action="Index" asp-route-id="@assignment.CourseId">
